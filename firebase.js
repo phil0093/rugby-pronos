@@ -20,4 +20,5 @@ const db = getFirestore(app);
 window.db = db;
 
 console.log("Firebase connecté");
+console.log(window.db);
 `
