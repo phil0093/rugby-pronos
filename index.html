@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rugby Pronos</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1>🏉 Rugby Pronos</h1>
+
+<div id="joueur">
+    <label>Joueur :</label>
+
+    <input
+    	type="text"
+    	id="playerName"
+    	placeholder="Votre nom"
+    	value="Philippe">
+</div>
+
+<section id="classement">
+
+    <h2>Classement général</h2>
+
+    <div id="ranking-list">
+
+        Aucun classement disponible
+
+    </div>
+
+</section>
+
+<div class="tabs">
+
+    <button
+        class="tab active"
+        data-tab="top14">
+
+        TOP 14
+
+    </button>
+
+    <button
+        class="tab"
+        data-tab="prod2">
+
+        PRO D2
+
+    </button>
+
+</div>
+
+<div id="matches">
+
+    <h2>TOP14</h2>
+
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
