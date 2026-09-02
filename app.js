@@ -337,6 +337,16 @@ function enregistrerProno(matchId) {
     	alert("Pronostic enregistré");
 
 }
+document
+    .getElementById("loginBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            loginGoogle();
+
+        }
+    );
 
 afficherMatchs("top14");
 afficherClassement();
