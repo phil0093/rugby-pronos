@@ -212,23 +212,43 @@ font-weight: bold;
 
 }
 
+.equipes,
+.resultat,
 .pronoScores {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
     align-items: center;
-    margin-top: 10px;
 }
 
-.pronoCol {
-    width: 45%;
+.equipes {
+    font-weight: bold;
     text-align: center;
+    margin-bottom: 8px;
 }
 
-.pronoCol input {
+.resultat {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #00854a;
+    margin-bottom: 12px;
+}
+
+.resultat span:nth-child(2) {
+    display: none;
+}
+
+.pronoScores {
+    margin-bottom: 10px;
+}
+
+.pronoScores input {
     width: 70px;
     text-align: center;
+    justify-self: center;
 }
 
-.pronoBtn {
-    width: 10%;
-    text-align: right;
+.pronoScores button {
+    justify-self: end;
+    white-space: nowrap;
 }
