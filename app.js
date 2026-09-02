@@ -305,8 +305,17 @@ function enregistrerProno(matchId) {
     const exterieur =
         document.getElementById(`ext-${matchId}`).value;
 
-    const joueur =
-        document.getElementById("playerName").value;
+    if(!window.currentUser){
+
+    alert(
+        "Connecte-toi avec Google"
+    );
+
+    return;
+}
+
+const joueur =
+    window.currentUser.displayName;
 
     if (joueur === "") {
 
