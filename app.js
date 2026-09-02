@@ -306,28 +306,35 @@ function afficherMatchs(competition, journee) {
     
     </div>
     
-    <div class="pronoScores">
+<div class="pronoScores">
+
+    <div class="pronoCol">
         <input
             type="number"
             min="0"
             value="${scoreDom}"
             placeholder="0"
             id="dom-${match.id}">
-    
+    </div>
+
+    <div class="pronoCol">
         <input
             type="number"
             min="0"
             value="${scoreExt}"
             placeholder="0"
             id="ext-${match.id}">
-    
+    </div>
+
+    <div class="pronoBtn">
         <button
             onclick="enregistrerProno(${match.id})">
-    
+
             Enregistrer
-    
+
         </button>
     </div>
+</div>
                 
                 <p>
 
