@@ -248,8 +248,8 @@ function afficherMatchs(competition, journee) {
 
     matchesDiv.innerHTML = "";
 
-    const joueur =
-    window.currentUser
+   const joueur =
+    window.currentUser?.displayName
         ? window.currentUser.displayName.split(" ")[0]
         : "";
 
