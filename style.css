@@ -212,3 +212,19 @@ font-weight: bold;
 
 }
 
+.pronoScores {
+
+    display: grid;
+    grid-template-columns: 60px 40px 60px;
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+}
+
+.pronoScores input {
+
+    width: 60px;
+    text-align: center;
+
+}
