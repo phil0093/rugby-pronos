@@ -239,10 +239,7 @@ function afficherClassement() {
     });
 }
 
-function afficherMatchs(
-    competition,
-    journee
-) {
+function afficherMatchs(competition, journee) {
 
     document.getElementById(
         "journeeTitre"
@@ -253,35 +250,25 @@ function afficherMatchs(
 
     const joueur =
     window.currentUser
-        ? window.currentUser.displayName
+        ? window.currentUser.displayName.split(" ")[0]
         : "";
 
     const matchsJournee =
     matches[competition]
-        .filter(
-            m => m.journee === journee
-        )
-        .sort((a, b) => {
-
-            return new Date(a.date) - new Date(b.date);
-
-        });
+        .filter(m => m.journee === journee)
+        .sort((a, b) => {return new Date(a.date) - new Date(b.date)});
 
     matchsJournee.forEach(match => {
-
-
         let scoreDom = "";
         let scoreExt = "";
 
         if (joueur) {
-
             const pronoSauve =
                 localStorage.getItem(
                     `prono_${joueur}_${match.id}`
                 );
 
             if (pronoSauve) {
-
                 const prono =
                     JSON.parse(pronoSauve);
 
@@ -292,59 +279,72 @@ function afficherMatchs(
 
         matchesDiv.innerHTML += `
 
-            <div class="match">
+     <div class="match">
 
-                <div class="equipes">
+         <div class="equipes">
 
-    <span>
-        ${match.domicile}
-    </span>
+            <span>
+                ${match.domicile}
+            </span>
+        
+            <span>
+                ${match.exterieur}
+            </span>
+        
+        </div>
 
-    <span>
-        ${match.exterieur}
-    </span>
+    <div class="resultat">
+    
+        <span>${match.scoreDom}</span>
+    
+        <span>-</span>
+    
+        <span>${match.scoreExt}</span>
+    
+    </div>
 
-</div>
-
-<div class="resultat">
-
-    <span>${match.scoreDom}</span>
-
-    <span>-</span>
-
-    <span>${match.scoreExt}</span>
-
-</div>
-
-<div class="pronoScores">
-
-    <input
-        type="number"
-        min="0"
-        value="${scoreDom}"
-        placeholder="0"
-        id="dom-${match.id}">
-
-    <span></span>
-
-    <input
-        type="number"
-        min="0"
-        value="${scoreExt}"
-        placeholder="0"
-        id="ext-${match.id}">
-
-</div>
-                <div class="prono">
-                
-                    <button
-                        onclick="enregistrerProno(${match.id})">
-
-                        Enregistrer
-
-                    </button>
-
-                </div>
+    <div class="pronoScores">
+    
+        <input
+            type="number"
+            min="0"
+            value="${scoreDom}"
+            placeholder="0"
+            id="dom-${match.id}">
+    
+        <span></span>
+    
+        <input
+            type="number"
+            min="0"
+            value="${scoreExt}"
+            placeholder="0"
+            id="ext-${match.id}">
+    
+    </div>
+    
+    <div class="pronoScores">
+        <input
+            type="number"
+            min="0"
+            value="${scoreDom}"
+            placeholder="0"
+            id="dom-${match.id}">
+    
+        <input
+            type="number"
+            min="0"
+            value="${scoreExt}"
+            placeholder="0"
+            id="ext-${match.id}">
+    
+        <button
+            onclick="enregistrerProno(${match.id})">
+    
+            Enregistrer
+    
+        </button>
+    </div>
                 
                 <p>
 
