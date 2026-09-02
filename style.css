@@ -123,29 +123,32 @@ font-weight: bold;
 
 .termine {color: #22a447}
 
-.equipes {
+.grilleMatch {
 
     display: grid;
 
     grid-template-columns:
-        1fr 80px 1fr;
+        1fr
+        60px
+        1fr;
+
+    row-gap: 12px;
+
+    align-items: center;
 
     text-align: center;
-
-    font-weight: bold;
-
-    margin-bottom: 10px;
 
 }
 
-.resultat {
+.equipe {
 
-    display: grid;
+    font-weight: bold;
 
-    grid-template-columns:
-        1fr 80px 1fr;
+    font-size: 18px;
 
-    text-align: center;
+}
+
+.score {
 
     font-size: 32px;
 
@@ -153,49 +156,32 @@ font-weight: bold;
 
     color: #00854a;
 
-    margin-bottom: 10px;
-
 }
 
-.pronoScores {
+.separateur {
 
-    display: grid;
+    text-align: center;
 
-    grid-template-columns:
-        1fr 80px 1fr auto;
-
-    align-items: center;
     font-size: 28px;
-    margin-bottom: 10px;
-
-}
-
-.pronoCol {
-
-    display: flex;
-
-    justify-content: center;
-
-}
-
-.pronoCol input {
-
-    width: 60px;
-
-    text-align: center;
-
-}
-
-.pronoMilieu {
-
-    text-align: center;
 
     font-weight: bold;
 
 }
 
-.pronoBtn {
+.prono input {
 
-    margin-left: 20px;
+    width: 60px;
+
+    padding: 5px;
+
+    text-align: center;
+
+}
+
+.actionsMatch {
+
+    margin-top: 15px;
+
+    text-align: center;
 
 }
