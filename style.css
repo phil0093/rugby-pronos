@@ -10,28 +10,10 @@ h1 {
     text-align: center;
 }
 
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.tab {
-    background-color: grey;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.tab.active {
-    background-color: green;
-}
-
 #classement {
     margin-bottom: 20px;
 }
+
 .tabs{
     display:flex;
     gap:10px;
@@ -66,38 +48,6 @@ h1 {
 .match p {
     margin: 0;
     color: #666;
-}
-
-.match{
-    border:1px solid #cccccc;
-    border-radius:8px;
-    padding:12px;
-    margin-bottom:10px;
-    background:white;
-}
-
-.match h3{
-    margin-top:0;
-}
-
-.prono{
-    display:flex;
-    gap:10px;
-    margin-top:10px;
-}
-
-.prono input{
-    width:70px;
-    padding:8px;
-}
-
-.prono button{
-    background:#00854a;
-    color:white;
-    border:none;
-    border-radius:5px;
-    padding:8px 15px;
-    cursor:pointer;
 }
 
 #joueur {
@@ -151,7 +101,6 @@ font-weight: bold;
 }
 
 #journeeSelector button{
-
     border:none;
     background:#00854a;
     color:white;
@@ -161,56 +110,18 @@ font-weight: bold;
     border-radius:5px;
 
     cursor:pointer;
-
-}
-
-.equipes {
-
-    display: flex;
-    justify-content: space-between;
-
-    font-weight: bold;
-    font-size: 18px;
-
-}
-
-.resultat {
-
-    display: flex;
-    justify-content: center;
-    gap: 25px;
-
-    margin: 15px 0;
-
-    font-size: 36px;
-    font-weight: bold;
-
 }
 
 .statut {
-
     margin-top: 10px;
     font-weight: bold;
-
 }
 
-.avenir {
+.avenir {color: #808080}
 
-    color: #808080;
+.encours {color: #ff9800}
 
-}
-
-.encours {
-
-    color: #ff9800;
-
-}
-
-.termine {
-
-    color: #22a447;
-
-}
+.termine {color: #22a447}
 
 .equipes {
 
