@@ -47,16 +47,28 @@ onAuthStateChanged(auth, (user) => {
 
         window.currentUser = user;
 
+        const prenom =
+            user.displayName.split(" ")[0];
+
         const currentUser =
             document.getElementById("currentUser");
 
         if (currentUser) {
 
-            const prenom = user.displayName.split(" ")[0];
+            currentUser.textContent =
+                "Connecté : " + prenom;
 
-currentUser.textContent =
-    "Connecté : " + prenom;
         }
+
+        if (typeof afficherMatchs === "function") {
+
+            afficherMatchs(
+                competitionCourante,
+                journeeCourante
+            );
+
+        }
+
     }
 
 });
