@@ -263,6 +263,9 @@ function afficherMatchs(competition, journee) {
         let scoreExt = "";
 
         if (joueur) {
+            console.log(
+                `prono_${joueur}_${match.id}`
+            );
             const pronoSauve =
                 localStorage.getItem(
                     `prono_${joueur}_${match.id}`
