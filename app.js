@@ -279,94 +279,93 @@ function afficherMatchs(competition, journee) {
 
         matchesDiv.innerHTML += `
 
-     <div class="match">
-
-         <div class="equipes">
-
-            <span>
-                ${match.domicile}
-            </span>
-        
-            <span>
-                ${match.exterieur}
-            </span>
-        
-        </div>
-
-    <div class="resultat">
-
-        <span>${match.scoreDom}</span>
+         <div class="match">
     
-        <span>-</span>
+             <div class="equipes">
     
-        <span>${match.scoreExt}</span>
-    
-    </div>
-    
-<div class="pronoScores">
-
-    <div class="pronoCol">
-        <input
-            type="number"
-            min="0"
-            value="${scoreDom}"
-            placeholder="0"
-            id="dom-${match.id}">
-    </div>
-
-    <div class="pronoMilieu">
-        -
-    </div>
-
-    <div class="pronoCol">
-        <input
-            type="number"
-            min="0"
-            value="${scoreExt}"
-            placeholder="0"
-            id="ext-${match.id}">
-    </div>
-
-    <div class="pronoBtn">
-
-        <button
-            onclick="enregistrerProno(${match.id})">
-
-            Enregistrer
-
-        </button>
-
-    </div>
-
-</div>
-                
-                <p>
-
-                    📅 ${formaterDate(match.date)}
-
-                    🕒 ${formaterHeure(match.date)}
-
-                </p>
-
-                <p class="statut ${match.statut}">
-
-    ${
-        match.statut === "avenir"
-            ? "⚪ À venir"
-            : match.statut === "encours"
-            ? "🟠 En cours"
-            : "🟢 Terminé"
-    }
-
-</p>
-
-                <p>
-                    Match n°${match.id}
-                </p>
-
-                
-
+                <span>
+                    ${match.domicile}
+                </span>
+            
+                <span>
+                    ${match.exterieur}
+                </span>
+            
             </div>
+    
+            <div class="resultat">
+        
+                <span>${match.scoreDom ?? 0}</span>
+            
+                <span>-</span>
+            
+                <span>${match.scoreExt ?? 0}</span>
+            
+            </div>
+        
+            <div class="pronoScores">
+    
+                <div class="pronoCol">
+                    <input
+                        type="number"
+                        min="0"
+                        value="${scoreDom}"
+                        placeholder="0"
+                        id="dom-${match.id}">
+                </div>
+    
+                <div class="pronoMilieu">
+                    -
+                </div>
+    
+                <div class="pronoCol">
+                    <input
+                        type="number"
+                        min="0"
+                        value="${scoreExt}"
+                        placeholder="0"
+                        id="ext-${match.id}">
+                </div>
+    
+                <div class="pronoBtn">
+            
+                    <button
+                        onclick="enregistrerProno(${match.id})">
+            
+                        Enregistrer
+            
+                    </button>
+            
+                </div>
+    
+            </div>
+                    
+            <p>
+    
+                📅 ${formaterDate(match.date)}
+    
+                🕒 ${formaterHeure(match.date)}
+    
+            </p>
+    
+            <p class="statut ${match.statut}">
+                ${
+                    match.statut === "avenir"
+                        ? "⚪ À venir"
+                        : match.statut === "encours"
+                        ? "🟠 En cours"
+                        : "🟢 Terminé"
+                }
+    
+            </p>
+    
+            <p>
+                Match n°${match.id}
+            </p>
+    
+                    
+    
+        </div>
 
         `;
     });
