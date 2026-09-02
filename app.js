@@ -316,6 +316,36 @@ function afficherMatchs(
 
 </div>
 
+<div class="pronoScores">
+
+    <input
+        type="number"
+        min="0"
+        value="${scoreDom}"
+        placeholder="0"
+        id="dom-${match.id}">
+
+    <span></span>
+
+    <input
+        type="number"
+        min="0"
+        value="${scoreExt}"
+        placeholder="0"
+        id="ext-${match.id}">
+
+</div>
+                <div class="prono">
+                
+                    <button
+                        onclick="enregistrerProno(${match.id})">
+
+                        Enregistrer
+
+                    </button>
+
+                </div>
+                
                 <p>
 
                     📅 ${formaterDate(match.date)}
@@ -340,30 +370,7 @@ function afficherMatchs(
                     Match n°${match.id}
                 </p>
 
-                <div class="prono">
-
-                    <input
-                        type="number"
-                        min="0"
-                        value="${scoreDom}"
-                        placeholder="Domicile"
-                        id="dom-${match.id}">
-
-                    <input
-                        type="number"
-                        min="0"
-                        value="${scoreExt}"
-                        placeholder="Extérieur"
-                        id="ext-${match.id}">
-
-                    <button
-                        onclick="enregistrerProno(${match.id})">
-
-                        Enregistrer
-
-                    </button>
-
-                </div>
+                
 
             </div>
 
