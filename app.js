@@ -241,11 +241,6 @@ function afficherMatchs(
 
         });
 
-matchsJournee.forEach(match => {
-
-    ...
-});
-
     matchsJournee.forEach(match => {
 
 
