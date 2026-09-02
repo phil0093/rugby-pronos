@@ -7,7 +7,7 @@ const matches = {
             journee: 1,
             domicile: "Stade Toulousain",
             exterieur: "La Rochelle",
-            date: "2026-09-05T21:05:00"
+            date: "2026-09-05T21:05:00",
 
             scoreDom: 0,
             scoreExt: 0,
@@ -20,7 +20,7 @@ const matches = {
             journee: 1,
             domicile: "RC Toulon",
             exterieur: "ASM Clermont",
-            date: "2026-09-06T21:05:00"
+            date: "2026-09-06T21:05:00",
 
             scoreDom: 0,
             scoreExt: 0,
@@ -33,7 +33,7 @@ const matches = {
             journee: 2,
             domicile: "Castres",
             exterieur: "Bayonne",
-            date: "2026-09-12T21:05:00"
+            date: "2026-09-12T21:05:00",
 
             scoreDom: 0,
             scoreExt: 0,
@@ -50,7 +50,7 @@ const matches = {
             journee: 1,
             domicile: "CA Brive",
             exterieur: "Oyonnax",
-            date: "2026-09-05T19:30:00"
+            date: "2026-09-05T19:30:00",
 
             scoreDom: 0,
             scoreExt: 0,
@@ -63,7 +63,7 @@ const matches = {
             journee: 1,
             domicile: "Grenoble",
             exterieur: "Biarritz",
-            date: "2026-09-06T19:30:00"
+            date: "2026-09-06T19:30:00",
 
             scoreDom: 0,
             scoreExt: 0,
