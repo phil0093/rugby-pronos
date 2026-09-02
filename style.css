@@ -214,10 +214,12 @@ font-weight: bold;
 
 .pronoScores {
 
-    display: grid;
-    grid-template-columns: 60px 40px 60px;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 15px;
 
+    margin-top: 10px;
     margin-bottom: 15px;
 
 }
@@ -225,6 +227,9 @@ font-weight: bold;
 .pronoScores input {
 
     width: 60px;
+
     text-align: center;
+
+    padding: 8px;
 
 }
