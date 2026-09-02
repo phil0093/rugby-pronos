@@ -4,16 +4,26 @@ const matches = {
 
         {
             id: 1,
+            journee: 1,
             domicile: "Stade Toulousain",
             exterieur: "La Rochelle",
-            date: "05/09/2026 21:05"
+            date: "2026-09-05T21:05:00"
         },
 
         {
             id: 2,
+            journee: 1,
             domicile: "RC Toulon",
             exterieur: "ASM Clermont",
-            date: "06/09/2026 21:05"
+            date: "2026-09-06T21:05:00"
+        },
+
+        {
+            id: 5,
+            journee: 2,
+            domicile: "Castres",
+            exterieur: "Bayonne",
+            date: "2026-09-12T21:05:00"
         }
 
     ],
@@ -22,22 +32,23 @@ const matches = {
 
         {
             id: 3,
+            journee: 1,
             domicile: "CA Brive",
             exterieur: "Oyonnax",
-            date: "05/09/2026 19:30"
+            date: "2026-09-05T19:30:00"
         },
 
         {
             id: 4,
+            journee: 1,
             domicile: "Grenoble",
             exterieur: "Biarritz",
-            date: "06/09/2026 19:30"
+            date: "2026-09-06T19:30:00"
         }
 
     ]
 
 };
-
 const resultats = {
 
     1: {
