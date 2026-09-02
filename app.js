@@ -8,6 +8,11 @@ const matches = {
             domicile: "Stade Toulousain",
             exterieur: "La Rochelle",
             date: "2026-09-05T21:05:00"
+
+            scoreDom: 0,
+            scoreExt: 0,
+    
+            statut: "avenir"
         },
 
         {
@@ -16,6 +21,11 @@ const matches = {
             domicile: "RC Toulon",
             exterieur: "ASM Clermont",
             date: "2026-09-06T21:05:00"
+
+            scoreDom: 0,
+            scoreExt: 0,
+    
+            statut: "avenir"
         },
 
         {
@@ -24,6 +34,11 @@ const matches = {
             domicile: "Castres",
             exterieur: "Bayonne",
             date: "2026-09-12T21:05:00"
+
+            scoreDom: 0,
+            scoreExt: 0,
+    
+            statut: "avenir"
         }
 
     ],
@@ -36,6 +51,11 @@ const matches = {
             domicile: "CA Brive",
             exterieur: "Oyonnax",
             date: "2026-09-05T19:30:00"
+
+            scoreDom: 0,
+            scoreExt: 0,
+    
+            statut: "avenir"
         },
 
         {
@@ -44,6 +64,11 @@ const matches = {
             domicile: "Grenoble",
             exterieur: "Biarritz",
             date: "2026-09-06T19:30:00"
+
+            scoreDom: 0,
+            scoreExt: 0,
+    
+            statut: "avenir"
         }
 
     ]
@@ -213,6 +238,7 @@ function afficherClassement() {
 
     });
 }
+
 function afficherMatchs(
     competition,
     journee
@@ -268,10 +294,27 @@ function afficherMatchs(
 
             <div class="match">
 
-                <h3>
-                    ${match.domicile} -
-                    ${match.exterieur}
-                </h3>
+                <div class="equipes">
+
+    <span>
+        ${match.domicile}
+    </span>
+
+    <span>
+        ${match.exterieur}
+    </span>
+
+</div>
+
+<div class="resultat">
+
+    <span>${match.scoreDom}</span>
+
+    <span>-</span>
+
+    <span>${match.scoreExt}</span>
+
+</div>
 
                 <p>
 
@@ -280,6 +323,18 @@ function afficherMatchs(
                     🕒 ${formaterHeure(match.date)}
 
                 </p>
+
+                <p class="statut ${match.statut}">
+
+    ${
+        match.statut === "avenir"
+            ? "⚪ À venir"
+            : match.statut === "encours"
+            ? "🟠 En cours"
+            : "🟢 Terminé"
+    }
+
+</p>
 
                 <p>
                     Match n°${match.id}
