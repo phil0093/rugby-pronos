@@ -302,26 +302,6 @@ function afficherMatchs(competition, journee) {
         <span>${match.scoreExt}</span>
     
     </div>
-
-    <div class="pronoScores">
-    
-        <input
-            type="number"
-            min="0"
-            value="${scoreDom}"
-            placeholder="0"
-            id="dom-${match.id}">
-    
-        <span></span>
-    
-        <input
-            type="number"
-            min="0"
-            value="${scoreExt}"
-            placeholder="0"
-            id="ext-${match.id}">
-    
-    </div>
     
     <div class="pronoScores">
         <input
