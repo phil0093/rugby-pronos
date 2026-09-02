@@ -163,3 +163,52 @@ font-weight: bold;
     cursor:pointer;
 
 }
+
+.equipes {
+
+    display: flex;
+    justify-content: space-between;
+
+    font-weight: bold;
+    font-size: 18px;
+
+}
+
+.resultat {
+
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+
+    margin: 15px 0;
+
+    font-size: 36px;
+    font-weight: bold;
+
+}
+
+.statut {
+
+    margin-top: 10px;
+    font-weight: bold;
+
+}
+
+.avenir {
+
+    color: #808080;
+
+}
+
+.encours {
+
+    color: #ff9800;
+
+}
+
+.termine {
+
+    color: #22a447;
+
+}
+
