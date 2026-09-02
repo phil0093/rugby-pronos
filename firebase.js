@@ -52,11 +52,10 @@ onAuthStateChanged(auth, (user) => {
 
         if (currentUser) {
 
-            currentUser.textContent =
-                user.displayName +
-                " (" +
-                user.email +
-                ")";
+            const prenom = user.displayName.split(" ")[0];
+
+currentUser.textContent =
+    "Connecté : " + prenom;
         }
     }
 
