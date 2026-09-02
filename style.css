@@ -213,23 +213,22 @@ font-weight: bold;
 }
 
 .pronoScores {
-
     display: flex;
-    justify-content: center;
     align-items: center;
-    gap: 15px;
-
     margin-top: 10px;
-    margin-bottom: 15px;
-
 }
 
-.pronoScores input {
-
-    width: 60px;
-
+.pronoCol {
+    width: 45%;
     text-align: center;
+}
 
-    padding: 8px;
+.pronoCol input {
+    width: 70px;
+    text-align: center;
+}
 
+.pronoBtn {
+    width: 10%;
+    text-align: right;
 }
