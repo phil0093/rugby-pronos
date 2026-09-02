@@ -250,22 +250,19 @@ function afficherMatchs(competition, journee) {
 
    const joueur =
     window.currentUser?.displayName
-        ? window.currentUser.displayName.split(" ")[0]
-        : "";
+        ?.split(" ")[0]
+        || "";
 
     const matchsJournee =
     matches[competition]
         .filter(m => m.journee === journee)
-        .sort((a, b) => {return new Date(a.date) - new Date(b.date)});
+        .sort((a, b) =>  new Date(a.date) - new Date(b.date));
 
     matchsJournee.forEach(match => {
         let scoreDom = "";
         let scoreExt = "";
 
         if (joueur) {
-            console.log(
-                `prono_${joueur}_${match.id}`
-            );
             const pronoSauve =
                 localStorage.getItem(
                     `prono_${joueur}_${match.id}`
