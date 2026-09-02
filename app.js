@@ -77,6 +77,10 @@ const resultats = {
 const tabs = document.querySelectorAll(".tab");
 const matchesDiv = document.getElementById("matches");
 
+let competitionCourante = "top14";
+
+let journeeCourante = 1;
+
 function calculerPoints(
     reelDom,
     reelExt,
@@ -185,7 +189,15 @@ function afficherClassement() {
 
     });
 }
-function afficherMatchs(competition) {
+function afficherMatchs(
+    competition,
+    journee
+) {
+
+    document.getElementById(
+        "journeeTitre"
+        ).textContent =
+    "Journée " + journee;
 
     matchesDiv.innerHTML = "";
 
@@ -194,7 +206,14 @@ function afficherMatchs(competition) {
         ? window.currentUser.displayName
         : "";
 
-    matches[competition].forEach(match => {
+    const matchsJournee =
+    matches[competition]
+        .filter(
+            m => m.journee === journee
+        );
+
+    matchsJournee.forEach(match => {
+
 
         let scoreDom = "";
         let scoreExt = "";
@@ -268,15 +287,21 @@ tabs.forEach(tab => {
 
     tab.addEventListener("click", () => {
 
-        tabs.forEach(t => {
-            t.classList.remove("active");
-        });
-
-        tab.classList.add("active");
-
-        afficherMatchs(tab.dataset.tab);
-
+    tabs.forEach(t => {
+        t.classList.remove("active");
     });
+
+    tab.classList.add("active");
+
+    competitionCourante =
+        tab.dataset.tab;
+
+    afficherMatchs(
+        competitionCourante,
+        journeeCourante
+    );
+
+});
 
 });
 
@@ -334,5 +359,38 @@ document
         }
     );
 
-afficherMatchs("top14");
+document
+.getElementById("journeeSuivante")
+.addEventListener("click", () => {
+
+    journeeCourante++;
+
+    afficherMatchs(
+        competitionCourante,
+        journeeCourante
+    );
+
+});
+
+document
+.getElementById("journeePrecedente")
+.addEventListener("click", () => {
+
+    if (journeeCourante > 1) {
+
+        journeeCourante--;
+
+    }
+
+    afficherMatchs(
+        competitionCourante,
+        journeeCourante
+    );
+
+});
+
+afficherMatchs(
+    competitionCourante,
+    journeeCourante
+);
 afficherClassement();
