@@ -114,7 +114,10 @@ function calculerPoints(
 ) {
 
     let points = 0;
-
+    let bonVainqueur = 0;
+    let scoreExact = 0;
+    let bonusProximite = 0;
+    
     const vainqueurReel =
         reelDom > reelExt ? "D" :
         reelExt > reelDom ? "E" :
@@ -126,7 +129,7 @@ function calculerPoints(
         "N";
 
     if (vainqueurReel === vainqueurProno) {
-
+        bonVainqueur = 1;
         points += 3;
 
         if (Number(pronoDom) === reelDom) {
@@ -137,6 +140,13 @@ function calculerPoints(
             points += 2;
         }
 
+        if (
+            Number(pronoDom) === reelDom &&
+            Number(pronoExt) === reelExt
+        ) {
+            scoreExact = 1;
+        }
+        
         const ecartDom =
             Math.abs(Number(pronoDom) - reelDom);
 
@@ -147,12 +157,18 @@ function calculerPoints(
             ecartDom <= 4 &&
             ecartExt <= 4
         ) {
+            bonusProximite = 1;
             points += 1;
         }
 
     }
 
-    return points;
+    return {
+        points,
+        bonVainqueur,
+        scoreExact,
+        bonusProximite
+    };
 }
 
 function formaterDate(dateISO) {
