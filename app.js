@@ -1,8 +1,3 @@
-import { db } from "./firebase.js";
-
-console.log("Firebase connecté");
-console.log(db);
-
 const matches = {
 
     top14: [
