@@ -297,12 +297,12 @@ function afficherMatchs(competition, journee) {
         </div>
 
     <div class="resultat">
-    
+
         <span>${match.scoreDom}</span>
     
-        <span>-</span>
-    
         <span>${match.scoreExt}</span>
+    
+        <span></span>
     
     </div>
     
