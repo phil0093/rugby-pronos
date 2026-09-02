@@ -331,12 +331,14 @@ function afficherMatchs(competition, journee) {
     </div>
 
     <div class="pronoBtn">
+
         <button
             onclick="enregistrerProno(${match.id})">
 
             Enregistrer
 
         </button>
+
     </div>
 
 </div>
