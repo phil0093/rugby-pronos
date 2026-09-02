@@ -289,35 +289,29 @@ function enregistrerProno(matchId) {
 const joueur =
     window.currentUser.displayName;
 
-    if (joueur === "") {
+const pronostic = {
 
-        alert("Saisis ton nom");
+    joueur: joueur,
+    matchId: matchId,
+    domicile: domicile,
+    exterieur: exterieur
 
-        return;
+};
 
-    }
+localStorage.setItem(
 
-    const pronostic = {
+    `prono_${joueur}_${matchId}`,
 
-        joueur: joueur,
-        matchId: matchId,
-        domicile: domicile,
-        exterieur: exterieur
+    JSON.stringify(pronostic)
 
-    };
+);
 
-    localStorage.setItem(
+afficherClassement();
 
-        `prono_${joueur}_${matchId}`,
-
-        JSON.stringify(pronostic)
-
-    );
-
-	afficherClassement();
-    	alert("Pronostic enregistré");
+alert("Pronostic enregistré");
 
 }
+
 document
     .getElementById("loginBtn")
     .addEventListener(
