@@ -300,9 +300,9 @@ function afficherMatchs(competition, journee) {
 
         <span>${match.scoreDom}</span>
     
-        <span>${match.scoreExt}</span>
+        <span>-</span>
     
-        <span></span>
+        <span>${match.scoreExt}</span>
     
     </div>
     
@@ -315,6 +315,10 @@ function afficherMatchs(competition, journee) {
             value="${scoreDom}"
             placeholder="0"
             id="dom-${match.id}">
+    </div>
+
+    <div class="pronoMilieu">
+        -
     </div>
 
     <div class="pronoCol">
@@ -334,6 +338,7 @@ function afficherMatchs(competition, journee) {
 
         </button>
     </div>
+
 </div>
                 
                 <p>
