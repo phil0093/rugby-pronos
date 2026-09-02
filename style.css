@@ -112,3 +112,30 @@ font-weight: bold;
     padding: 8px;
     margin-left: 10px;
 }
+
+#auth{
+    margin-bottom:20px;
+}
+
+#loginBtn{
+
+    background:#4285F4;
+    color:white;
+
+    border:none;
+
+    padding:10px 15px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+
+#currentUser{
+
+    margin-top:10px;
+
+    font-weight:bold;
+
+}
