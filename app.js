@@ -287,7 +287,7 @@ function enregistrerProno(matchId) {
 }
 
 const joueur =
-    window.currentUser.displayName;
+    window.currentUser.displayName.split(" ")[0];
 
 const pronostic = {
 
