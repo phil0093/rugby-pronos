@@ -281,31 +281,33 @@ function afficherMatchs(competition, journee) {
 
          <div class="match">
     
-             <div class="equipes">
-    
-                <span>
+            <div class="grilleMatch">
+
+                <div class="equipe">
                     ${match.domicile}
-                </span>
+                </div>
             
-                <span>
+                <div class="separateur">
+                    -
+                </div>
+            
+                <div class="equipe">
                     ${match.exterieur}
-                </span>
+                </div>
             
-            </div>
-    
-            <div class="resultat">
-        
-                <span>${match.scoreDom ?? 0}</span>
+                <div class="score">
+                    ${match.scoreDom ?? 0}
+                </div>
             
-                <span>-</span>
+                <div class="separateur">
+                    -
+                </div>
             
-                <span>${match.scoreExt ?? 0}</span>
+                <div class="score">
+                    ${match.scoreExt ?? 0}
+                </div>
             
-            </div>
-        
-            <div class="pronoScores">
-    
-                <div class="pronoCol">
+                <div class="prono">
                     <input
                         type="number"
                         min="0"
@@ -313,12 +315,12 @@ function afficherMatchs(competition, journee) {
                         placeholder="0"
                         id="dom-${match.id}">
                 </div>
-    
-                <div class="pronoMilieu">
+            
+                <div class="separateur">
                     -
                 </div>
-    
-                <div class="pronoCol">
+            
+                <div class="prono">
                     <input
                         type="number"
                         min="0"
@@ -326,18 +328,18 @@ function afficherMatchs(competition, journee) {
                         placeholder="0"
                         id="ext-${match.id}">
                 </div>
-    
-                <div class="pronoBtn">
             
-                    <button
-                        onclick="enregistrerProno(${match.id})">
+            </div>
             
-                        Enregistrer
+            <div class="actionsMatch">
             
-                    </button>
+                <button
+                    onclick="enregistrerProno(${match.id})">
             
-                </div>
-    
+                    Enregistrer
+            
+                </button>
+            
             </div>
                     
             <p>
