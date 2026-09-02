@@ -179,7 +179,9 @@ function afficherMatchs(competition) {
     matchesDiv.innerHTML = "";
 
     const joueur =
-        document.getElementById("playerName")?.value || "";
+    window.currentUser
+        ? window.currentUser.displayName
+        : "";
 
     matches[competition].forEach(match => {
 
@@ -266,31 +268,6 @@ tabs.forEach(tab => {
     });
 
 });
-
-const playerInput =
-    document.getElementById("playerName");
-
-if (localStorage.getItem("playerName")) {
-
-    playerInput.value =
-        localStorage.getItem("playerName");
-
-}
-
-playerInput.addEventListener("input", () => {
-
-    localStorage.setItem(
-        "playerName",
-        playerInput.value
-    );
-
-    afficherMatchs(
-        document.querySelector(".tab.active")
-            .dataset.tab
-    );
-
-});
-
 
 function enregistrerProno(matchId) {
 
