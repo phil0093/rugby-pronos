@@ -234,7 +234,17 @@ function afficherMatchs(
     matches[competition]
         .filter(
             m => m.journee === journee
-        );
+        )
+        .sort((a, b) => {
+
+            return new Date(a.date) - new Date(b.date);
+
+        });
+
+matchsJournee.forEach(match => {
+
+    ...
+});
 
     matchsJournee.forEach(match => {
 
