@@ -139,3 +139,27 @@ font-weight: bold;
     font-weight:bold;
 
 }
+#journeeSelector{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+
+    margin-bottom:20px;
+
+}
+
+#journeeSelector button{
+
+    border:none;
+    background:#00854a;
+    color:white;
+
+    padding:8px 15px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
