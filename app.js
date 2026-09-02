@@ -130,6 +130,30 @@ function calculerPoints(
     return points;
 }
 
+function formaterDate(dateISO) {
+
+    const date = new Date(dateISO);
+
+    return date.toLocaleDateString(
+        "fr-FR"
+    );
+
+}
+
+function formaterHeure(dateISO) {
+
+    const date = new Date(dateISO);
+
+    return date.toLocaleTimeString(
+        "fr-FR",
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
 function afficherClassement() {
 
     const classement = {};
@@ -245,7 +269,11 @@ function afficherMatchs(
                 </h3>
 
                 <p>
-                    📅 ${match.date}
+
+                    📅 ${formaterDate(match.date)}
+
+                    🕒 ${formaterHeure(match.date)}
+
                 </p>
 
                 <p>
