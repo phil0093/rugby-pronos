@@ -141,6 +141,7 @@ function calculerPoints(
             scoreExact = 1
             points += 1;
         }
+
         
         const ecartDom =
             Math.abs(Number(pronoDom) - reelDom);
