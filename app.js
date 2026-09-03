@@ -133,12 +133,12 @@ function calculerPoints(
         points += 3;
 
         if (Number(pronoDom) === reelDom) {
-            scoreExact = 1
+            scoreExact += 1
             points += 1;
         }
 
         if (Number(pronoExt) === reelExt) {
-            scoreExact = 1
+            scoreExact += 1
             points += 1;
         }
 
@@ -248,42 +248,22 @@ function afficherClassement() {
 
         classement[joueur].paris++;
 
-        const points =
+        const resultatCalcul =
             calculerPoints(
-
+        
                 resultat.domicile,
                 resultat.exterieur,
-
+        
                 prono.domicile,
                 prono.exterieur
-
+        
             );
 
         classement[joueur].points +=
             resultatCalcul.points;
 
-        const exactDom =
-            Number(prono.domicile) === resultat.domicile;
-
-        const exactExt =
-            Number(prono.exterieur) === resultat.exterieur;
-
         classement[joueur].scoreExact +=
             resultatCalcul.scoreExact;
-
-        const vainqueurReel =
-            resultat.domicile > resultat.exterieur
-                ? "D"
-                : resultat.exterieur > resultat.domicile
-                ? "E"
-                : "N";
-
-        const vainqueurProno =
-            prono.domicile > prono.exterieur
-                ? "D"
-                : prono.exterieur > prono.domicile
-                ? "E"
-                : "N";
 
         classement[joueur].scoreJuste +=
             resultatCalcul.bonVainqueur;
