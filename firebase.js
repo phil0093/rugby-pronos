@@ -2,11 +2,11 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
-        getFirestore,
-        doc,
-        getDoc
-    }
-    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+            getFirestore,
+            collection,
+            getDocs
+        }
+        from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 import {
     getAuth,
@@ -34,36 +34,32 @@ const auth = getAuth(app);
 window.db = db;
 window.auth = auth;
 
-async function testFirestore() {
-
-        const ref =
-            doc(
-                db,
-                "matchs",
-                "match-test"
-            );
-    
-        const snap =
-            await getDoc(ref);
-    
-        if (snap.exists()) {
-    
+async function chargerMatchsFirestore() {
+            const querySnapshot =
+                await getDocs(
+                    collection(
+                        db,
+                        "matchs"
+                    )
+                );
+        
+            window.matchesFirestore =
+                querySnapshot.docs.map(doc => ({
+        
+                    id: doc.id,
+        
+                    ...doc.data()
+        
+                }));
+        
             console.log(
-                "Document trouvé :",
-                snap.data()
+                "Matchs Firestore :",
+                window.matchesFirestore
             );
-    
-        } else {
-    
-            console.log(
-                "Document introuvable"
-            );
-    
+        
         }
-    
-    }
-    
-    testFirestore();
+
+window.matchesFirestore = [];
 
 const provider = new GoogleAuthProvider();
 
@@ -108,4 +104,5 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
+chargerMatchsFirestore();
 console.log("Firebase connecté");
