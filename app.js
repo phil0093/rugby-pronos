@@ -259,7 +259,8 @@ function afficherClassement() {
 
             );
 
-        classement[joueur].points += points;
+        classement[joueur].points +=
+            resultatCalcul.points;
 
         const exactDom =
             Number(prono.domicile) === resultat.domicile;
@@ -267,11 +268,8 @@ function afficherClassement() {
         const exactExt =
             Number(prono.exterieur) === resultat.exterieur;
 
-        if (exactDom && exactExt) {
-
-            classement[joueur].scoreExact++;
-
-        }
+        classement[joueur].scoreExact +=
+            resultatCalcul.scoreExact;
 
         const vainqueurReel =
             resultat.domicile > resultat.exterieur
@@ -287,11 +285,8 @@ function afficherClassement() {
                 ? "E"
                 : "N";
 
-        if (vainqueurReel === vainqueurProno) {
-
-            classement[joueur].scoreJuste++;
-
-        }
+        classement[joueur].scoreJuste +=
+            resultatCalcul.bonVainqueur;
 
     }
 
