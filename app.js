@@ -12,7 +12,7 @@ const matches = {
             scoreDom: 0,
             scoreExt: 0,
     
-            statut: "avenir"
+            statut: "terminé"
         },
 
         {
@@ -133,18 +133,13 @@ function calculerPoints(
         points += 3;
 
         if (Number(pronoDom) === reelDom) {
-            points += 2;
+            scoreExact = 1
+            points += 1;
         }
 
         if (Number(pronoExt) === reelExt) {
-            points += 2;
-        }
-
-        if (
-            Number(pronoDom) === reelDom &&
-            Number(pronoExt) === reelExt
-        ) {
-            scoreExact = 1;
+            scoreExact = 1
+            points += 1;
         }
         
         const ecartDom =
@@ -158,7 +153,7 @@ function calculerPoints(
             ecartExt <= 4
         ) {
             bonusProximite = 1;
-            points += 1;
+            points += 2;
         }
 
     }
@@ -212,6 +207,22 @@ function afficherClassement() {
                 localStorage.getItem(cle)
             );
 
+        const match = Object
+            .values(matches)
+            .flat()
+            .find(m => m.id === prono.matchId);
+
+        if (!match) {
+            continue;
+        }
+
+        if (
+            match.statut !== "encours" &&
+            match.statut !== "termine"
+        ) {
+            continue;
+        }
+
         const resultat =
             resultats[prono.matchId];
 
@@ -219,19 +230,68 @@ function afficherClassement() {
             continue;
         }
 
-        const points =
-            calculerPoints(
-                resultat.domicile,
-                resultat.exterieur,
-                prono.domicile,
-                prono.exterieur
-            );
+        const joueur = prono.joueur;
 
-        if (!classement[prono.joueur]) {
-            classement[prono.joueur] = 0;
+        if (!classement[joueur]) {
+
+            classement[joueur] = {
+
+                paris: 0,
+                scoreExact: 0,
+                scoreJuste: 0,
+                points: 0
+
+            };
+
         }
 
-        classement[prono.joueur] += points;
+        classement[joueur].paris++;
+
+        const points =
+            calculerPoints(
+
+                resultat.domicile,
+                resultat.exterieur,
+
+                prono.domicile,
+                prono.exterieur
+
+            );
+
+        classement[joueur].points += points;
+
+        const exactDom =
+            Number(prono.domicile) === resultat.domicile;
+
+        const exactExt =
+            Number(prono.exterieur) === resultat.exterieur;
+
+        if (exactDom && exactExt) {
+
+            classement[joueur].scoreExact++;
+
+        }
+
+        const vainqueurReel =
+            resultat.domicile > resultat.exterieur
+                ? "D"
+                : resultat.exterieur > resultat.domicile
+                ? "E"
+                : "N";
+
+        const vainqueurProno =
+            prono.domicile > prono.exterieur
+                ? "D"
+                : prono.exterieur > prono.domicile
+                ? "E"
+                : "N";
+
+        if (vainqueurReel === vainqueurProno) {
+
+            classement[joueur].scoreJuste++;
+
+        }
+
     }
 
     const rankingDiv =
@@ -239,20 +299,78 @@ function afficherClassement() {
 
     rankingDiv.innerHTML = "";
 
-    const rows =
+    const lignes =
         Object.entries(classement)
-            .sort((a, b) => b[1] - a[1]);
+            .sort(
+                (a, b) =>
+                b[1].points - a[1].points
+            );
 
-    rows.forEach(ligne => {
+    rankingDiv.innerHTML = `
 
-        rankingDiv.innerHTML += `
-            <p>
-                <strong>${ligne[0]}</strong>
-                : ${ligne[1]} pts
-            </p>
-        `;
+        <table class="classementTable">
 
-    });
+            <thead>
+
+                <tr>
+
+                    <th>Joueur</th>
+                    <th>Paris</th>
+                    <th>Scores exacts</th>
+                    <th>Scores justes</th>
+                    <th>% Victoire</th>
+                    <th>Points</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                ${lignes.map(ligne => {
+
+                    const nom = ligne[0];
+
+                    const stats = ligne[1];
+
+                    const pourcentage =
+                        stats.paris > 0
+                            ? (
+                                stats.scoreJuste
+                                /
+                                stats.paris
+                                * 100
+                              ).toFixed(0)
+                            : 0;
+
+                    return `
+
+                        <tr>
+
+                            <td>${nom}</td>
+
+                            <td>${stats.paris}</td>
+
+                            <td>${stats.scoreExact}</td>
+
+                            <td>${stats.scoreJuste}</td>
+
+                            <td>${pourcentage}%</td>
+
+                            <td>${stats.points}</td>
+
+                        </tr>
+
+                    `;
+
+                }).join("")}
+
+            </tbody>
+
+        </table>
+
+    `;
+
 }
 
 function afficherMatchs(competition, journee) {
