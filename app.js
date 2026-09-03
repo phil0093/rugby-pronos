@@ -444,7 +444,7 @@ function afficherMatchs(competition, journee) {
                 </div>
             
                 <div class="score">
-                    ${${scoreDomAffiche ?? 0}
+                    ${scoreDomAffiche ?? 0}
                 </div>
             
                 <div class="separateur">
