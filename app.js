@@ -12,7 +12,7 @@ const matches = {
             scoreDom: 0,
             scoreExt: 0,
     
-            statut: "terminé"
+            statut: "termine"
         },
 
         {
@@ -412,6 +412,19 @@ function afficherMatchs(competition, journee) {
             }
         }
 
+        const resultatMatch =
+            resultats[match.id];
+        
+        const scoreDomAffiche =
+            resultatMatch
+                ? resultatMatch.domicile
+                : match.scoreDom;
+        
+        const scoreExtAffiche =
+            resultatMatch
+            ? resultatMatch.exterieur
+            : match.scoreExt;
+        
         matchesDiv.innerHTML += `
 
          <div class="match">
@@ -431,7 +444,7 @@ function afficherMatchs(competition, journee) {
                 </div>
             
                 <div class="score">
-                    ${match.scoreDom ?? 0}
+                    ${${scoreDomAffiche ?? 0}
                 </div>
             
                 <div class="separateur">
@@ -439,7 +452,7 @@ function afficherMatchs(competition, journee) {
                 </div>
             
                 <div class="score">
-                    ${match.scoreExt ?? 0}
+                    ${scoreExtAffiche ?? 0}
                 </div>
             
                 <div class="prono">
