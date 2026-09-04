@@ -40,7 +40,15 @@ for journee in range(1, 27):
         response.text,
         "html.parser"
     )
-
+    for date_bloc in soup.select(
+        ".calendar-results__fixture-date"
+    ):
+        print(
+            date_bloc.get_text(
+                strip=True
+            )
+        )
+    
     for match in soup.select(".match-calendar-line"):
 
         equipes = match.select(
