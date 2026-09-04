@@ -1,53 +1,60 @@
 import requests
 from bs4 import BeautifulSoup
 
-URL = "https://top14.lnr.fr/calendrier-et-resultats/2026-2027/j2"
+BASE_URL = "https://top14.lnr.fr/calendrier-et-resultats/2026-2027"
 
-response = requests.get(
-    URL,
-    headers={
-        "User-Agent": "Mozilla/5.0"
-    }
-)
+all_matchs = []
 
-soup = BeautifulSoup(
-    response.text,
-    "html.parser"
-)
+for journee in range(1, 27):
 
-matchs = []
+    url = f"{BASE_URL}/j{journee}"
 
-for match in soup.select(".match-calendar-line"):
-
-    equipes = match.select(
-        ".club-line__name"
+    response = requests.get(
+        url,
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        }
     )
 
-    heure = match.select_one(
-        ".match-line__time"
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
     )
 
-    if len(equipes) < 2:
-        continue
+    for match in soup.select(".match-calendar-line"):
 
-    matchs.append({
+        equipes = match.select(
+            ".club-line__name"
+        )
 
-        "domicile":
-            equipes[0].get_text(
-                strip=True
-            ),
+        heure = match.select_one(
+            ".match-line__time"
+        )
 
-        "exterieur":
-            equipes[1].get_text(
-                strip=True
-            ),
+        if len(equipes) < 2:
+            continue
 
-        "heure":
-            heure.get_text(
-                strip=True
-            ) if heure else ""
+        all_matchs.append({
 
-    })
+            "journee": journee,
 
-print(matchs)
-print(f"{len(matchs)} matchs trouvés")
+            "domicile":
+                equipes[0].get_text(
+                    strip=True
+                ),
+
+            "exterieur":
+                equipes[1].get_text(
+                    strip=True
+                ),
+
+            "heure":
+                heure.get_text(
+                    strip=True
+                ) if heure else ""
+
+        })
+
+print(
+    f"{len(all_matchs)} matchs trouvés"
+)
