@@ -34,6 +34,12 @@ const auth = getAuth(app);
 window.db = db;
 window.auth = auth;
 
+window.matchesFirestore = [];
+
+window.matchesParCompetition = {
+    top14: []
+};
+
 async function chargerMatchsFirestore() {
 
     const querySnapshot =
@@ -52,6 +58,14 @@ async function chargerMatchsFirestore() {
             ...doc.data()
 
         }));
+
+    window.matchesParCompetition.top14 =
+        window.matchesFirestore;
+
+    console.log(
+        "TOP14",
+        window.matchesParCompetition.top14
+    );
 
     console.log(
         "Matchs Firestore :",
@@ -76,8 +90,6 @@ async function chargerMatchsFirestore() {
     });
 
 }
-
-window.matchesFirestore = [];
 
 const provider = new GoogleAuthProvider();
 
