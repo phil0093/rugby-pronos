@@ -58,6 +58,13 @@ async function chargerMatchsFirestore() {
         window.matchesFirestore
     );
 
+    console.log(
+        "Journee 1",
+        window.matchesFirestore.filter(
+            m => m.journee === 1
+        )
+    );
+
     window.matchesFirestore.forEach(match => {
 
         console.log(
@@ -69,6 +76,7 @@ async function chargerMatchsFirestore() {
     });
 
 }
+`
 
 window.matchesFirestore = [];
 
