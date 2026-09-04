@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-URL = "https://top14.lnr.fr/calendrier-et-resultats"
+URL = "https://top14.lnr.fr/calendrier-et-resultats/2026-2027/j2"
 
 response = requests.get(
     URL,
