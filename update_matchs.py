@@ -58,3 +58,4 @@ for journee in range(1, 27):
 print(
     f"{len(all_matchs)} matchs trouvés"
 )
+print(all_matchs[:10])
