@@ -62,6 +62,11 @@ async function chargerMatchsFirestore() {
     window.matchesParCompetition.top14 =
         window.matchesFirestore;
 
+            console.log(
+                "Premier match",
+                window.matchesFirestore[0]
+            );
+
     console.log(
         "TOP14",
         window.matchesParCompetition.top14
