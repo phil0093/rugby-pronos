@@ -20,5 +20,5 @@ jobs:
       - run: pip install requests beautifulsoup4 firebase-admin
 
       - run: python update_matchs.py
-      env:
-        FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
+        env:
+          FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
