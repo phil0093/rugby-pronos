@@ -30,6 +30,28 @@ for journee in range(1, 27):
         heure = match.select_one(
             ".match-line__time"
         )
+
+        score = match.select_one(
+            ".match-line__score"
+        )
+
+        score_dom = None
+        score_ext = None
+        statut = "avenir"
+        
+        if score:
+        
+            statut = "termine"
+        
+            texte_score = score.get_text(
+                strip=True
+            )
+        
+            if " - " in texte_score:
+        
+                score_dom, score_ext = (
+                    texte_score.split(" - ")
+                )
         
         lien = match.select_one(
             'a[href*="feuille-de-match"]'
@@ -69,7 +91,13 @@ for journee in range(1, 27):
             "heure":
                 heure.get_text(
                     strip=True
-                ) if heure else ""
+                ) if heure else "",
+
+            "scoreDom": score_dom,
+
+            "scoreExt": score_ext,
+
+            "statut": statut
 
         })
 
