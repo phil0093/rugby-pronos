@@ -6,6 +6,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
+
 BASE_URL = "https://top14.lnr.fr/calendrier-et-resultats/2026-2027"
 
 all_matchs = []
