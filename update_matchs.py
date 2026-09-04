@@ -75,6 +75,10 @@ for journee in range(1, 27):
         all_matchs.append({
 
             "id_lnr": id_lnr,
+
+            "competition": "top14",
+
+            "saison": "2026-2027",
             
             "journee": journee,
 
