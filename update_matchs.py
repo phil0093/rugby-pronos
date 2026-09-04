@@ -52,7 +52,9 @@ for journee in range(1, 27):
                 score_dom, score_ext = (
                     texte_score.split(" - ")
                 )
-        
+                score_dom = int(score_dom)
+                score_ext = int(score_ext)
+                
         lien = match.select_one(
             'a[href*="feuille-de-match"]'
         )
