@@ -40,54 +40,67 @@ for journee in range(1, 27):
         response.text,
         "html.parser"
     )
-    date_bloc = soup.select_one(
-        ".calendar-results__fixture-date"
-    )
     
     date_match = ""
     
+    date_bloc = soup.select_one(
+        ".calendar-results__fixture-date"
+    )
+
     if date_bloc:
-    
+
         texte_date = (
             date_bloc.get_text(strip=True)
         ).lower()
     
         texte_date = texte_date.split("–")[0].strip()
-
-    mois = {
-    "janvier": "01",
-    "février": "02",
-    "mars": "03",
-    "avril": "04",
-    "mai": "05",
-    "juin": "06",
-    "juillet": "07",
-    "août": "08",
-    "septembre": "09",
-    "octobre": "10",
-    "novembre": "11",
-    "décembre": "12"
-}
-
-morceaux = texte_date.split()
-
-if len(morceaux) >= 3:
-
-    jour = morceaux[1].zfill(2)
-
-    mois_num = mois.get(
-        morceaux[2],
-        "01"
+    
+        mois = {
+            "janvier": "01",
+            "février": "02",
+            "mars": "03",
+            "avril": "04",
+            "mai": "05",
+            "juin": "06",
+            "juillet": "07",
+            "août": "08",
+            "septembre": "09",
+            "octobre": "10",
+            "novembre": "11",
+            "décembre": "12"
+        }
+    
+        morceaux = texte_date.split()
+    
+        if len(morceaux) >= 3:
+    
+            jour = morceaux[1].zfill(2)
+    
+            mois_num = mois.get(morceaux[2])
+    
+            if mois_num:
+    
+                annee = "2026"
+    
+                if mois_num in [
+                    "01",
+                    "02",
+                    "03",
+                    "04",
+                    "05",
+                    "06"
+                ]:
+                    annee = "2027"
+    
+                date_match = (
+                    f"{annee}-{mois_num}-{jour}"
+                )
+    
+    print(
+        f"J{journee}: {date_match}"
     )
-
-    annee = "2026"
-
-    if mois_num == "01":
-        annee = "2027"
-
-    date_match = (
-        f"{annee}-{mois_num}-{jour}"
-    )
+    
+    
     
     
     for match in soup.select(".match-calendar-line"):
