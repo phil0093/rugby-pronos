@@ -76,7 +76,6 @@ async function chargerMatchsFirestore() {
     });
 
 }
-`
 
 window.matchesFirestore = [];
 
@@ -98,7 +97,9 @@ onAuthStateChanged(auth, (user) => {
         window.currentUser = user;
 
         const prenom =
-            user.displayName.split(" ")[0];
+                user.displayName
+                    ? user.displayName.split(" ")[0]
+                    : user.email;
 
         const currentUser =
             document.getElementById("currentUser");
