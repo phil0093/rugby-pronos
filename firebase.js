@@ -35,36 +35,40 @@ window.db = db;
 window.auth = auth;
 
 async function chargerMatchsFirestore() {
-            const querySnapshot =
-                await getDocs(
-                    collection(
-                        db,
-                        "matchs"
-                    )
-                );
-        
-            window.matchesFirestore =
-                querySnapshot.docs.map(doc => ({
-        
-                    id: doc.id,
-        
-                    ...doc.data()
-        
-                }));
-        
-            console.log(
-                "Matchs Firestore :",
-                window.matchesFirestore
-                        window.matchesFirestore.forEach(match => {
-                            console.log(
-                                `${match.domicile} - ${match.exterieur}`
-                            );
-                        
-                        });
-                        
-            );
-        
-        }
+
+    const querySnapshot =
+        await getDocs(
+            collection(
+                db,
+                "matchs"
+            )
+        );
+
+    window.matchesFirestore =
+        querySnapshot.docs.map(doc => ({
+
+            id: doc.id,
+
+            ...doc.data()
+
+        }));
+
+    console.log(
+        "Matchs Firestore :",
+        window.matchesFirestore
+    );
+
+    window.matchesFirestore.forEach(match => {
+
+        console.log(
+            match.domicile +
+            " - " +
+            match.exterieur
+        );
+
+    });
+
+}
 
 window.matchesFirestore = [];
 
