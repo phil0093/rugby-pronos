@@ -39,12 +39,21 @@ for journee in range(1, 27):
             lien["href"]
             if lien else ""
         )
+        id_lnr = ""
 
+        if "/j" in url_match:
+        
+            morceau = url_match.split("/")[-1]
+        
+            id_lnr = morceau.split("-")[0]
+    
         if len(equipes) < 2:
             continue
 
         all_matchs.append({
 
+            "id_lnr": id_lnr,
+            
             "journee": journee,
 
             "domicile":
@@ -60,10 +69,7 @@ for journee in range(1, 27):
             "heure":
                 heure.get_text(
                     strip=True
-                ) if heure else "",
-
-            "id_lnr":
-                url_match
+                ) if heure else ""
 
         })
 
