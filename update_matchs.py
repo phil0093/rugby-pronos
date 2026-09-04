@@ -30,6 +30,15 @@ for journee in range(1, 27):
         heure = match.select_one(
             ".match-line__time"
         )
+        
+        lien = match.select_one(
+            'a[href*="feuille-de-match"]'
+        )
+        
+        url_match = (
+            lien["href"]
+            if lien else ""
+        )
 
         if len(equipes) < 2:
             continue
@@ -51,11 +60,15 @@ for journee in range(1, 27):
             "heure":
                 heure.get_text(
                     strip=True
-                ) if heure else ""
+                ) if heure else "",
+
+            "id_lnr":
+                url_match
 
         })
 
 print(
     f"{len(all_matchs)} matchs trouvés"
 )
-print(all_matchs[:10])
+print(all_matchs[:3])
+
