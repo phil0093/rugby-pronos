@@ -131,3 +131,13 @@ print(
 )
 print(all_matchs[:3])
 
+for match in all_matchs:
+
+    db.collection("matchs") \
+      .document(match["id_lnr"]) \
+      .set(match)
+
+print(
+    f"{len(all_matchs)} matchs écrits dans Firestore"
+)
+
