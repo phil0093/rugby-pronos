@@ -55,6 +55,13 @@ async function chargerMatchsFirestore() {
             console.log(
                 "Matchs Firestore :",
                 window.matchesFirestore
+                        window.matchesFirestore.forEach(match => {
+                            console.log(
+                                `${match.domicile} - ${match.exterieur}`
+                            );
+                        
+                        });
+                        
             );
         
         }
