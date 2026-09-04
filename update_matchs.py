@@ -1,9 +1,28 @@
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
+import json
+import os
 import requests
 from bs4 import BeautifulSoup
 
 BASE_URL = "https://top14.lnr.fr/calendrier-et-resultats/2026-2027"
 
 all_matchs = []
+
+firebase_json = json.loads(
+    os.environ["FIREBASE_CREDENTIALS"]
+)
+
+cred = credentials.Certificate(
+    firebase_json
+)
+
+firebase_admin.initialize_app(
+    cred
+)
+
+db = firestore.client()
 
 for journee in range(1, 27):
 
