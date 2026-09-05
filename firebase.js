@@ -38,16 +38,8 @@ window.matchesParCompetition = {
 };
 
 function rafraichirAffichage() {
-
-    if (typeof afficherMatchs === "function") {
-        afficherMatchs(
-            competitionCourante,
-            journeeCourante
-        );
-    }
-
-    if (typeof afficherClassement === "function") {
-        afficherClassement();
+    if (typeof window.rafraichirAffichage === "function") {
+        window.rafraichirAffichage();
     }
 }
 
