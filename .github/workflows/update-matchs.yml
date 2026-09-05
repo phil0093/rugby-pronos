@@ -1,4 +1,4 @@
-name: Update Matchs
+name: Update TOP14
 
 on:
   workflow_dispatch:
