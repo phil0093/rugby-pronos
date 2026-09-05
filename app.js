@@ -519,3 +519,13 @@ afficherMatchs(
     journeeCourante
 );
 afficherClassement();
+
+window.enregistrerProno = enregistrerProno;
+
+window.rafraichirAffichage = function () {
+    afficherMatchs(
+        competitionCourante,
+        journeeCourante
+    );
+    afficherClassement();
+};
