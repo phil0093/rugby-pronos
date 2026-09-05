@@ -1,13 +1,11 @@
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
 import {
-            getFirestore,
-            collection,
-            getDocs
-        }
-        from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
+    getFirestore,
+    collection,
+    onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import {
     getAuth,
     GoogleAuthProvider,
@@ -26,85 +24,76 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getFirestore(app);
-
 const auth = getAuth(app);
 
 window.db = db;
 window.auth = auth;
 
-window.matchesFirestore = [];
-
+// Rempli et mis à jour automatiquement par le listener Firestore ci-dessous.
+// app.js lit cet objet à la place de l'ancien "const matches" codé en dur.
 window.matchesParCompetition = {
-    top14: []
+    top14: [],
+    prod2: []
 };
 
-async function chargerMatchsFirestore() {
+function rafraichirAffichage() {
 
-    const querySnapshot =
-        await getDocs(
-            collection(
-                db,
-                "matchs"
-            )
+    if (typeof afficherMatchs === "function") {
+        afficherMatchs(
+            competitionCourante,
+            journeeCourante
         );
+    }
 
-    window.matchesFirestore =
-        querySnapshot.docs.map(doc => ({
+    if (typeof afficherClassement === "function") {
+        afficherClassement();
+    }
+}
 
-            id: doc.id,
+// Écoute Firestore en temps réel : à chaque ajout/modification dans la
+// collection "matchs" (score qui tombe, statut qui change...), les données
+// sont automatiquement remises à jour et l'affichage est rafraîchi.
+onSnapshot(
+    collection(db, "matchs"),
+    (querySnapshot) => {
 
-            ...doc.data()
+        const tousLesMatchs =
+            querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
 
-        }));
-
-    window.matchesParCompetition.top14 =
-        window.matchesFirestore;
-
-            console.log(
-                "Premier match",
-                window.matchesFirestore[0]
-            );
-
-    console.log(
-        "TOP14",
-        window.matchesParCompetition.top14
-    );
-
-    console.log(
-        "Matchs Firestore :",
-        window.matchesFirestore
-    );
-
-    console.log(
-        "Journee 1",
-        window.matchesFirestore.filter(
-            m => m.journee === 1
-        )
-    );
-
-    window.matchesFirestore.forEach(match => {
+        window.matchesParCompetition = {
+            top14: tousLesMatchs.filter(
+                m => m.competition === "top14"
+            ),
+            prod2: tousLesMatchs.filter(
+                m => m.competition === "prod2"
+            )
+        };
 
         console.log(
-            match.domicile +
-            " - " +
-            match.exterieur
+            `Matchs Firestore mis à jour : ${tousLesMatchs.length}`
         );
 
-    });
-
-}
+        rafraichirAffichage();
+    },
+    (erreur) => {
+        console.error(
+            "Erreur de lecture Firestore :",
+            erreur
+        );
+    }
+);
 
 const provider = new GoogleAuthProvider();
 
 window.loginGoogle = async function () {
-
     await signInWithPopup(
         auth,
         provider
     );
-
 };
 
 onAuthStateChanged(auth, (user) => {
@@ -114,32 +103,20 @@ onAuthStateChanged(auth, (user) => {
         window.currentUser = user;
 
         const prenom =
-                user.displayName
-                    ? user.displayName.split(" ")[0]
-                    : user.email;
+            user.displayName
+                ? user.displayName.split(" ")[0]
+                : user.email;
 
         const currentUser =
             document.getElementById("currentUser");
 
         if (currentUser) {
-
             currentUser.textContent =
                 "Connecté : " + prenom;
-
         }
 
-        if (typeof afficherMatchs === "function") {
-
-            afficherMatchs(
-                competitionCourante,
-                journeeCourante
-            );
-
-        }
-
+        rafraichirAffichage();
     }
-
 });
 
-chargerMatchsFirestore();
 console.log("Firebase connecté");
