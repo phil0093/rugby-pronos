@@ -3,7 +3,9 @@ from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
     initializeFirestore,
     collection,
-    onSnapshot
+    onSnapshot,
+    doc,
+    setDoc
 }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 import {
@@ -24,20 +26,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = initializeFirestore(app, {
     experimentalAutoDetectLongPolling: true
 });
+
 const auth = getAuth(app);
 
 window.db = db;
 window.auth = auth;
 
-// Rempli et mis à jour automatiquement par le listener Firestore ci-dessous.
-// app.js lit cet objet à la place de l'ancien "const matches" codé en dur.
+// Rempli et mis à jour automatiquement par les listeners Firestore ci-dessous.
 window.matchesParCompetition = {
     top14: [],
     prod2: []
 };
+
+window.pronosTousLesJoueurs = [];
 
 function rafraichirAffichage() {
     if (typeof window.rafraichirAffichage === "function") {
@@ -45,9 +50,7 @@ function rafraichirAffichage() {
     }
 }
 
-// Écoute Firestore en temps réel : à chaque ajout/modification dans la
-// collection "matchs" (score qui tombe, statut qui change...), les données
-// sont automatiquement remises à jour et l'affichage est rafraîchi.
+// Écoute Firestore en temps réel sur les matchs.
 onSnapshot(
     collection(db, "matchs"),
     (querySnapshot) => {
@@ -75,11 +78,63 @@ onSnapshot(
     },
     (erreur) => {
         console.error(
-            "Erreur de lecture Firestore :",
+            "Erreur de lecture Firestore (matchs) :",
             erreur
         );
     }
 );
+
+// Écoute Firestore en temps réel sur les pronostics de TOUS les joueurs
+// (nécessaire pour calculer le classement commun).
+onSnapshot(
+    collection(db, "pronostics"),
+    (querySnapshot) => {
+
+        window.pronosTousLesJoueurs =
+            querySnapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+        console.log(
+            `Pronostics Firestore mis à jour : ${window.pronosTousLesJoueurs.length}`
+        );
+
+        rafraichirAffichage();
+    },
+    (erreur) => {
+        console.error(
+            "Erreur de lecture Firestore (pronostics) :",
+            erreur
+        );
+    }
+);
+
+// Enregistre (ou remplace) le pronostic de l'utilisateur connecté
+// pour un match donné.
+window.enregistrerPronoFirestore = async function (matchId, domicile, exterieur) {
+
+    if (!window.currentUser) {
+        throw new Error("Utilisateur non connecté");
+    }
+
+    const uid = window.currentUser.uid;
+
+    const joueur =
+        window.currentUser.displayName
+            ? window.currentUser.displayName.split(" ")[0]
+            : window.currentUser.email;
+
+    const pronosticId = `${matchId}_${uid}`;
+
+    await setDoc(doc(db, "pronostics", pronosticId), {
+        matchId: matchId,
+        uid: uid,
+        joueur: joueur,
+        domicile: Number(domicile),
+        exterieur: Number(exterieur)
+    });
+};
 
 const provider = new GoogleAuthProvider();
 
