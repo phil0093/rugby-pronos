@@ -107,18 +107,7 @@ function afficherClassement() {
 
     const classement = {};
 
-    for (let i = 0; i < localStorage.length; i++) {
-
-        const cle = localStorage.key(i);
-
-        if (!cle.startsWith("prono_")) {
-            continue;
-        }
-
-        const prono =
-            JSON.parse(
-                localStorage.getItem(cle)
-            );
+    (window.pronosTousLesJoueurs || []).forEach(prono => {
 
         const match = Object
             .values(window.matchesParCompetition)
@@ -126,14 +115,14 @@ function afficherClassement() {
             .find(m => m.id === prono.matchId);
 
         if (!match) {
-            continue;
+            return;
         }
 
         if (
             match.statut !== "encours" &&
             match.statut !== "termine"
         ) {
-            continue;
+            return;
         }
 
         if (
@@ -142,7 +131,7 @@ function afficherClassement() {
             match.scoreExt === null ||
             match.scoreExt === undefined
         ) {
-            continue;
+            return;
         }
 
         const joueur = prono.joueur;
@@ -164,13 +153,13 @@ function afficherClassement() {
 
         const resultatCalcul =
             calculerPoints(
-        
+
                 match.scoreDom,
                 match.scoreExt,
-        
+
                 prono.domicile,
                 prono.exterieur
-        
+
             );
 
         classement[joueur].points +=
@@ -182,7 +171,7 @@ function afficherClassement() {
         classement[joueur].scoreJuste +=
             resultatCalcul.bonVainqueur;
 
-    }
+    });
 
     const rankingDiv =
         document.getElementById("ranking-list");
@@ -272,11 +261,6 @@ function afficherMatchs(competition, journee) {
 
     matchesDiv.innerHTML = "";
 
-   const joueur =
-    window.currentUser?.displayName
-        ?.split(" ")[0]
-        || "";
-
     const matchsCompetition =
         window.matchesParCompetition[competition] || [];
 
@@ -292,18 +276,15 @@ function afficherMatchs(competition, journee) {
         let scoreDom = "";
         let scoreExt = "";
 
-        if (joueur) {
-            const pronoSauve =
-                localStorage.getItem(
-                    `prono_${joueur}_${match.id}`
-                );
+        const uid = window.currentUser?.uid;
+
+        if (uid) {
+            const pronoSauve = (window.pronosTousLesJoueurs || [])
+                .find(p => p.matchId === match.id && p.uid === uid);
 
             if (pronoSauve) {
-                const prono =
-                    JSON.parse(pronoSauve);
-
-                scoreDom = prono.domicile;
-                scoreExt = prono.exterieur;
+                scoreDom = pronoSauve.domicile;
+                scoreExt = pronoSauve.exterieur;
             }
         }
 
@@ -430,7 +411,7 @@ tabs.forEach(tab => {
 
 });
 
-function enregistrerProno(matchId) {
+async function enregistrerProno(matchId) {
 
     const domicile =
         document.getElementById(`dom-${matchId}`).value;
@@ -438,38 +419,18 @@ function enregistrerProno(matchId) {
     const exterieur =
         document.getElementById(`ext-${matchId}`).value;
 
-    if(!window.currentUser){
+    if (!window.currentUser) {
+        alert("Connecte-toi avec Google");
+        return;
+    }
 
-    alert(
-        "Connecte-toi avec Google"
-    );
-
-    return;
-}
-
-const joueur =
-    window.currentUser.displayName.split(" ")[0];
-
-const pronostic = {
-
-    joueur: joueur,
-    matchId: matchId,
-    domicile: domicile,
-    exterieur: exterieur
-
-};
-
-localStorage.setItem(
-
-    `prono_${joueur}_${matchId}`,
-
-    JSON.stringify(pronostic)
-
-);
-
-afficherClassement();
-
-alert("Pronostic enregistré");
+    try {
+        await window.enregistrerPronoFirestore(matchId, domicile, exterieur);
+        alert("Pronostic enregistré");
+    } catch (erreur) {
+        console.error("Erreur lors de l'enregistrement du pronostic :", erreur);
+        alert("Erreur lors de l'enregistrement du pronostic");
+    }
 
 }
 
@@ -519,9 +480,7 @@ afficherMatchs(
     journeeCourante
 );
 afficherClassement();
-
 window.enregistrerProno = enregistrerProno;
-
 window.rafraichirAffichage = function () {
     afficherMatchs(
         competitionCourante,
