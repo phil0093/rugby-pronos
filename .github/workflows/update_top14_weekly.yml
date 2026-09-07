@@ -3,6 +3,17 @@ name: Update TOP14 Weekly
 on:
   workflow_dispatch:
 
+  schedule:
+
+    # Tous les jours à 01h00 (heure française d'été)
+    - cron: '0 23 * * *'
+
+    # Samedi toutes les 2 minutes de 15h00 à 22h58
+    - cron: '*/2 12-21 * * 6'
+
+    # Dimanche toutes les 2 minutes de 21h00 à 22h58
+    - cron: '*/2 19-21 * * 0'
+
 jobs:
 
   update:
