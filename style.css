@@ -31,8 +31,9 @@ h1 {
 }
 
 .tab.active{
-    background:#00854a;
+    background:#857a00;
     color:white;
+    transform:scale(1.1);
 }
 
 .match {
