@@ -21,11 +21,13 @@ h1 {
 }
 
 .tab{
-    padding:10px 20px;
+    padding:30px 60px;
     border:none;
-    border-radius:6px;
+    border-radius:10px;
     cursor:pointer;
     background:#cccccc;
+    font-size:24px;
+    font-weight:bold;
 }
 
 .tab.active{
@@ -168,15 +170,13 @@ font-weight: bold;
 
 }
 
-.prono input {
-
-    width: 60px;
-
-    padding: 5px;
-
-    text-align: center;
-
+.prono input{
+    width:100px;
+    height:70px;
+    font-size:32px;
+    font-weight:bold;
 }
+
 
 .actionsMatch {
 
