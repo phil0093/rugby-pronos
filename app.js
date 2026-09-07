@@ -275,7 +275,8 @@ function afficherMatchs(competition, journee) {
     matchsJournee.forEach(match => {
         let scoreDom = "";
         let scoreExt = "";
-
+        let statutProno = "⚪";
+        
         const uid = window.currentUser?.uid;
 
         if (uid) {
@@ -285,6 +286,8 @@ function afficherMatchs(competition, journee) {
             if (pronoSauve) {
                 scoreDom = pronoSauve.domicile;
                 scoreExt = pronoSauve.exterieur;
+
+                statutProno = "🟡";
             }
         }
 
@@ -329,7 +332,8 @@ function afficherMatchs(competition, journee) {
                         min="0"
                         value="${scoreDom}"
                         placeholder="0"
-                        id="dom-${match.id}">
+                        id="dom-${match.id}"
+                        onchange="enregistrerProno('${match.id}')">
                 </div>
             
                 <div class="separateur">
@@ -342,19 +346,19 @@ function afficherMatchs(competition, journee) {
                         min="0"
                         value="${scoreExt}"
                         placeholder="0"
-                        id="ext-${match.id}">
+                        id="ext-${match.id}"
+                        onchange="enregistrerProno('${match.id}')">
                 </div>
             
             </div>
             
             <div class="actionsMatch">
-            
-                <button
-                    onclick="enregistrerProno('${match.id}')">
-            
-                    Enregistrer
-            
-                </button>
+
+                <span
+                    class="etatProno"
+                    id="etat-${match.id}">
+                    ${statutProno}
+                </span>
             
             </div>
                     
@@ -426,10 +430,24 @@ async function enregistrerProno(matchId) {
 
     try {
         await window.enregistrerPronoFirestore(matchId, domicile, exterieur);
-        alert("Pronostic enregistré");
+        const icone =
+            document.getElementById(
+                    `etat-${matchId}`
+                );
+            
+        if (icone) {
+        
+            icone.textContent = "✅";
+        
+            setTimeout(() => {
+        
+                icone.textContent = "🟡";
+        
+            }, 2000);
+        
+        }
     } catch (erreur) {
         console.error("Erreur lors de l'enregistrement du pronostic :", erreur);
-        alert("Erreur lors de l'enregistrement du pronostic");
     }
 
 }
