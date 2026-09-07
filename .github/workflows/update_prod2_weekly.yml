@@ -3,6 +3,17 @@ name: Update PROD2 Weekly
 on:
   workflow_dispatch:
 
+  schedule:
+
+    # Tous les jours à 01h00 (heure française d'été)
+    - cron: '0 23 * * *'
+
+    # Jeudi toutes les 2 minutes de 19h00 à 22h58
+    - cron: '*/2 17-21 * * 4'
+
+    # Vendredi toutes les 2 minutes de 19h00 à 22h58
+    - cron: '*/2 17-21 * * 5'
+
 jobs:
 
   update:
