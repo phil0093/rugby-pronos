@@ -16,7 +16,8 @@ h1 {
 
 .tabs{
     display:flex;
-    gap:10px;
+    justify-content: center;
+    gap:20px;
     margin:20px 0;
 }
 
@@ -33,7 +34,7 @@ h1 {
 .tab.active{
     background:#857a00;
     color:white;
-    transform:scale(1.1);
+    transform:scale(1.2);
 }
 
 .match {
@@ -171,11 +172,17 @@ font-weight: bold;
 
 }
 
-.prono input{
-    width:100px;
-    height:70px;
-    font-size:32px;
-    font-weight:bold;
+.prono input {
+
+    width: 90px;
+    height: 60px;
+
+    text-align: center;
+
+    font-size: 28px;
+    font-weight: bold;
+
+    line-height: 60px;
 }
 
 
