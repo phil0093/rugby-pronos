@@ -41,7 +41,7 @@ function calculerPoints(
         "N";
 
     if (vainqueurReel === vainqueurProno) {
-        bonVainqueur = +1;
+        bonVainqueur += 1;
         points += 3;
 
         if (Number(pronoDom) === reelDom) {
@@ -142,6 +142,7 @@ function afficherClassement() {
                 paris: 0,
                 scoreExact: 0,
                 scoreJuste: 0,
+                bonVainqueur: 0,
                 points: 0
 
             };
