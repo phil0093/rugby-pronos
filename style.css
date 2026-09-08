@@ -99,7 +99,8 @@ font-weight: bold;
     justify-content:center;
     align-items:center;
     gap:15px;
-
+    font-size: 32px;
+    font-weight: bold;
     margin-bottom:20px;
 
 }
@@ -108,11 +109,10 @@ font-weight: bold;
     border:none;
     background:#00854a;
     color:white;
-
-    padding:8px 15px;
-
+    font-size:24px;
+    font-weight:bold;
+    padding:12px 25px;
     border-radius:5px;
-
     cursor:pointer;
 }
 
@@ -136,7 +136,7 @@ font-weight: bold;
         60px
         1fr;
 
-    row-gap: 12px;
+    row-gap: 6px;
 
     align-items: center;
 
@@ -148,7 +148,7 @@ font-weight: bold;
 
     font-weight: bold;
 
-    font-size: 18px;
+    font-size: 26px;
 
 }
 
@@ -210,7 +210,9 @@ font-weight: bold;
 
     color: white;
 
-    padding: 10px;
+    padding: 15px;
+
+    font-size: 22px;
 
 }
 
@@ -218,9 +220,11 @@ font-weight: bold;
 
     border: 1px solid #dddddd;
 
-    padding: 8px;
+    padding: 12px;
 
     text-align: center;
+
+    font-size: 20px;
 
 }
 
