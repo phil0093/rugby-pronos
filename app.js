@@ -252,6 +252,40 @@ function afficherClassement() {
 
 }
 
+function trouverJourneeCourante(competition) {
+
+    const matchs =
+        window.matchesParCompetition[
+            competition
+        ] || [];
+
+    const journees =
+        [...new Set(
+            matchs.map(m => m.journee)
+        )].sort((a, b) => a - b);
+
+    for (const journee of journees) {
+
+        const matchsJournee =
+            matchs.filter(
+                m => m.journee === journee
+            );
+
+        const tousTermines =
+            matchsJournee.every(
+                m => m.statut === "termine"
+            );
+
+        if (!tousTermines) {
+            return journee;
+        }
+    }
+
+    return journees[
+        journees.length - 1
+    ] || 1;
+}
+
 function afficherMatchs(competition, journee) {
 
     document.getElementById(
@@ -486,7 +520,12 @@ tabs.forEach(tab => {
 
     competitionCourante =
         tab.dataset.tab;
-
+    
+    journeeCourante =
+        trouverJourneeCourante(
+            competitionCourante
+        );
+    
     afficherMatchs(
         competitionCourante,
         journeeCourante
@@ -574,13 +613,24 @@ document
 
 });
 
+journeeCourante =
+    trouverJourneeCourante(
+        competitionCourante
+    );
+
 afficherMatchs(
     competitionCourante,
     journeeCourante
 );
 afficherClassement();
+
 window.enregistrerProno = enregistrerProno;
 window.rafraichirAffichage = function () {
+    journeeCourante =
+        trouverJourneeCourante(
+            competitionCourante
+        );
+    
     afficherMatchs(
         competitionCourante,
         journeeCourante
