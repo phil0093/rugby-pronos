@@ -54,7 +54,6 @@ function calculerPoints(
             points += 1;
         }
 
-        
         const ecartDom =
             Math.abs(Number(pronoDom) - reelDom);
 
@@ -65,7 +64,7 @@ function calculerPoints(
             ecartDom <= 4 &&
             ecartExt <= 4
         ) {
-            bonusProximite = 1;
+            bonusProximite =+ 1;
             points += 2;
         }
 
@@ -169,7 +168,7 @@ function afficherClassement() {
             resultatCalcul.scoreExact;
 
         classement[joueur].scoreJuste +=
-            resultatCalcul.bonVainqueur;
+            resultatCalcul.bonusProximite;
 
     });
 
