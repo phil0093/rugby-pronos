@@ -150,10 +150,6 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
 
         window.currentUser = user;
-        alert(
-            "EMAIL : " + user.email +
-            "\nUID : " + user.uid
-        );
         
         const prenom =
             user.displayName
