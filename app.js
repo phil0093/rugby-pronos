@@ -351,14 +351,16 @@ function afficherMatchs(competition, journee) {
                 dateISO &&
                 new Date(dateISO) <= maintenant
             );
-
-        matchesDiv.innerHTML += `
-
-        if (matchCommence) {
-
+       if (
+            matchCommence &&
+            statutProno !== "✅"
+        ) {
+        
             statutProno = "🔒";
         
         }
+        
+        matchesDiv.innerHTML += `
         
          <div class="match ${classeResultat}">
     
