@@ -341,9 +341,25 @@ function afficherMatchs(competition, journee) {
         }
         
         const dateISO = construireDateISO(match);
+        const maintenant = new Date();
+        const matchCommence =
+            match.statut === "encours"
+            ||
+            match.statut === "termine"
+            ||
+            (
+                dateISO &&
+                new Date(dateISO) <= maintenant
+            );
 
         matchesDiv.innerHTML += `
 
+        if (matchCommence) {
+
+            statutProno = "🔒";
+        
+        }
+        
          <div class="match ${classeResultat}">
     
             <div class="grilleMatch">
@@ -397,7 +413,8 @@ function afficherMatchs(competition, journee) {
                         value="${scoreDom}"
                         placeholder="0"
                         id="dom-${match.id}"
-                        onchange="enregistrerProno('${match.id}')">
+                        onchange="enregistrerProno('${match.id}')"
+                        ${matchCommence ? "disabled" : ""}>
                 </div>
             
                 <div class="separateur">
@@ -411,7 +428,8 @@ function afficherMatchs(competition, journee) {
                         value="${scoreExt}"
                         placeholder="0"
                         id="ext-${match.id}"
-                        onchange="enregistrerProno('${match.id}')">
+                        onchange="enregistrerProno('${match.id}')"
+                        ${matchCommence ? "disabled" : ""}>
                 </div>
             
             </div>
