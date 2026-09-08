@@ -293,12 +293,58 @@ function afficherMatchs(competition, journee) {
 
         const scoreDomAffiche = match.scoreDom;
         const scoreExtAffiche = match.scoreExt;
+        let classeResultat = "";
+        let scoreDomDore = "";
+        let scoreExtDore = "";
 
+        if (
+            match.statut === "termine" &&
+            scoreDom !== "" &&
+            scoreExt !== ""
+        ) {
+        
+            const resultatCalcul =
+                calculerPoints(
+                    match.scoreDom,
+                    match.scoreExt,
+                    scoreDom,
+                    scoreExt
+                );
+        
+            if (resultatCalcul.bonVainqueur) {
+                classeResultat = "matchVert";
+            }
+        
+            if (
+                resultatCalcul.bonVainqueur &&
+                resultatCalcul.bonusProximite
+            ) {
+                classeResultat = "matchVertFonce";
+            }
+        
+            if (
+                Number(scoreDom)
+                ===
+                match.scoreDom
+            ) {
+                scoreDomDore = "scoreDore";
+            }
+        
+            if (
+                Number(scoreExt)
+                ===
+                match.scoreExt
+            ) {
+                scoreExtDore = "scoreDore";
+            }
+        
+        }
+        
         const dateISO = construireDateISO(match);
 
         matchesDiv.innerHTML += `
 
-         <div class="match">
+         <div class="match ${classeResultat}">
     
             <div class="grilleMatch">
 
@@ -314,7 +360,7 @@ function afficherMatchs(competition, journee) {
                     ${match.exterieur}
                 </div>
             
-                <div class="score">
+                <div class="score ${scoreDomDore}">
                     ${scoreDomAffiche ?? 0}
                 </div>
             
@@ -322,7 +368,7 @@ function afficherMatchs(competition, journee) {
                     -
                 </div>
             
-                <div class="score">
+                <div class="score ${scoreExtDore}">
                     ${scoreExtAffiche ?? 0}
                 </div>
             
