@@ -41,7 +41,7 @@ function calculerPoints(
         "N";
 
     if (vainqueurReel === vainqueurProno) {
-        bonVainqueur = 1;
+        bonVainqueur = +1;
         points += 3;
 
         if (Number(pronoDom) === reelDom) {
@@ -169,7 +169,10 @@ function afficherClassement() {
 
         classement[joueur].scoreJuste +=
             resultatCalcul.bonusProximite;
-
+        
+        classement[joueur].bonVainqueur +=
+            resultatCalcul.bonVainqueur;
+        
     });
 
     const rankingDiv =
@@ -214,7 +217,7 @@ function afficherClassement() {
                     const pourcentage =
                         stats.paris > 0
                             ? (
-                                stats.scoreJuste
+                                stats.bonVainqueur
                                 /
                                 stats.paris
                                 * 100
