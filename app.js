@@ -408,31 +408,28 @@ function afficherMatchs(competition, journee) {
             
             </div>
                     
-            <p>
-    
-                📅 ${dateISO ? formaterDate(dateISO) : "?"}
-    
-                🕒 ${dateISO ? formaterHeure(dateISO) : "?"}
-    
-            </p>
-    
-            <p class="statut ${match.statut}">
-                ${
-                    match.statut === "avenir"
-                        ? "⚪ À venir"
-                        : match.statut === "encours"
-                        ? "🟠 En cours"
-                        : "🟢 Terminé"
-                }
-    
-            </p>
-    
-            <p>
-                Match n°${match.id}
-            </p>
-    
-                    
-    
+            <div class="infosMatch">
+
+                <span>
+                    📅 ${dateISO ? formaterDate(dateISO) : "?"}
+                </span>
+            
+                <span>
+                    🕒 ${dateISO ? formaterHeure(dateISO) : "?"}
+                </span>
+            
+                <span class="statut ${match.statut}">
+                    ${
+                        match.statut === "avenir"
+                            ? "⚪ À venir"
+                            : match.statut === "encours"
+                            ? "🟠 En cours"
+                            : "🟢 Terminé"
+                    }
+                </span>
+            
+            </div>
+
         </div>
 
         `;
