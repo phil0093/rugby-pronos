@@ -349,15 +349,33 @@ function afficherMatchs(competition, journee) {
             <div class="grilleMatch">
 
                 <div class="equipe">
-                    ${match.domicile}
+
+                    <img
+                        class="logoEquipe"
+                        src="${match.logoDom}"
+                        alt="${match.domicile}">
+                
+                    <span>
+                        ${match.domicile}
+                    </span>
+                
                 </div>
             
                 <div class="separateur">
                     -
                 </div>
-            
+
                 <div class="equipe">
-                    ${match.exterieur}
+               
+                    <span>
+                        ${match.exterieur}
+                    </span>
+
+                    <img
+                        class="logoEquipe"
+                        src="${match.logoExt}"
+                        alt="${match.exterieur}">
+                
                 </div>
             
                 <div class="score ${scoreDomDore}">
