@@ -240,3 +240,21 @@ font-weight: bold;
     margin-top: 10px;
 
 }
+
+.matchVert {
+
+    background: #a2d698;
+
+}
+
+.matchVertFonce {
+
+    background: #5a8c50;
+
+}
+
+.scoreDore {
+
+    color: #d4af37 !important;
+
+}
