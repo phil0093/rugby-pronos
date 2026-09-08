@@ -99,6 +99,7 @@ def scrape_journee(journee):
             continue
 
         equipes = match.select(".club-line__name")
+        logos = match.select(".club-line__icon-img")
         heure = match.select_one(".match-line__time")
         score = match.select_one(".match-line__score")
 
@@ -132,7 +133,9 @@ def scrape_journee(journee):
             "saison": SAISON,
             "journee": journee,
             "domicile": equipes[0].get_text(strip=True),
+            "logoDom": logos[0]["src"] if len(logos) > 0 else "",
             "exterieur": equipes[1].get_text(strip=True),
+            "logoExt": logos[1]["src"] if len(logos) > 1 else "",
             "heure": heure.get_text(strip=True).replace("h", ":") if heure else "00:00",
             "date": date_courante,
             "scoreDom": score_dom,
