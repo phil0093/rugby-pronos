@@ -133,47 +133,41 @@ function afficherClassement() {
             return;
         }
 
-        const joueur = prono.joueur;
+        const uid = prono.uid;
 
-        if (!classement[joueur]) {
-
-            classement[joueur] = {
-
+        if (!classement[uid]) {
+            classement[uid] = {
+                joueur: prono.joueur,
                 paris: 0,
                 scoreExact: 0,
                 scoreJuste: 0,
                 bonVainqueur: 0,
                 points: 0
-
             };
-
         }
 
-        classement[joueur].paris++;
+        classement[uid].paris++;
 
         const resultatCalcul =
             calculerPoints(
-
                 match.scoreDom,
                 match.scoreExt,
-
                 prono.domicile,
                 prono.exterieur
-
             );
 
-        classement[joueur].points +=
+        classement[uid].points +=
             resultatCalcul.points;
 
-        classement[joueur].scoreExact +=
+        classement[uid].scoreExact +=
             resultatCalcul.scoreExact;
 
-        classement[joueur].scoreJuste +=
+        classement[uid].scoreJuste +=
             resultatCalcul.bonusProximite;
-        
-        classement[joueur].bonVainqueur +=
+
+        classement[uid].bonVainqueur +=
             resultatCalcul.bonVainqueur;
-        
+
     });
 
     const rankingDiv =
@@ -182,38 +176,26 @@ function afficherClassement() {
     rankingDiv.innerHTML = "";
 
     const lignes =
-        Object.entries(classement)
+        Object.values(classement)
             .sort(
                 (a, b) =>
-                b[1].points - a[1].points
+                b.points - a.points
             );
 
     rankingDiv.innerHTML = `
-
         <table class="classementTable">
-
             <thead>
-
                 <tr>
-
                     <th>Joueur</th>
                     <th>Paris</th>
                     <th>Scores exacts</th>
                     <th>Scores justes</th>
                     <th>% Victoire</th>
                     <th>Points</th>
-
                 </tr>
-
             </thead>
-
             <tbody>
-
-                ${lignes.map(ligne => {
-
-                    const nom = ligne[0];
-
-                    const stats = ligne[1];
+                ${lignes.map(stats => {
 
                     const pourcentage =
                         stats.paris > 0
@@ -226,33 +208,19 @@ function afficherClassement() {
                             : 0;
 
                     return `
-
                         <tr>
-
-                            <td>${nom}</td>
-
+                            <td>${stats.joueur}</td>
                             <td>${stats.paris}</td>
-
                             <td>${stats.scoreExact}</td>
-
                             <td>${stats.scoreJuste}</td>
-
                             <td>${pourcentage}%</td>
-
                             <td>${stats.points}</td>
-
                         </tr>
-
                     `;
-
                 }).join("")}
-
             </tbody>
-
         </table>
-
     `;
-
 }
 
 function trouverJourneeCourante(competition) {
