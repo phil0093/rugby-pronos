@@ -402,7 +402,13 @@ function afficherMatchs(competition, journee) {
                         alt="${match.exterieur}">
                 
                 </div>
-            
+
+                <div class="infosDroite">
+
+                    📅 ${dateISO ? formaterDate(dateISO) : "?"}
+                
+                </div>
+
                 <div class="score ${scoreDomDore}">
                     ${scoreDomAffiche ?? 0}
                 </div>
@@ -414,7 +420,13 @@ function afficherMatchs(competition, journee) {
                 <div class="score ${scoreExtDore}">
                     ${scoreExtAffiche ?? 0}
                 </div>
-            
+
+                <div class="infosDroite">
+
+                    🕒 ${dateISO ? formaterHeure(dateISO) : "?"}
+                
+                </div>
+
                 <div class="prono">
                     <input
                         type="number"
@@ -444,20 +456,9 @@ function afficherMatchs(competition, journee) {
                         onchange="enregistrerProno('${match.id}')"
                         ${matchCommence ? "disabled" : ""}>
                 </div>
-            
-            </div>
-                    
-            <div class="infosMatch">
 
-                <span>
-                    📅 ${dateISO ? formaterDate(dateISO) : "?"}
-                </span>
-            
-                <span>
-                    🕒 ${dateISO ? formaterHeure(dateISO) : "?"}
-                </span>
-            
-                <span class="statut ${match.statut}">
+                <div class="infosDroite statut ${match.statut}">
+
                     ${
                         match.statut === "avenir"
                             ? "⚪ À venir"
@@ -465,8 +466,8 @@ function afficherMatchs(competition, journee) {
                             ? "🟠 En cours"
                             : "🟢 Terminé"
                     }
-                </span>
-            
+                
+                </div>
             </div>
 
         </div>
