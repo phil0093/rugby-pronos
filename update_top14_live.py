@@ -163,10 +163,6 @@ db = firestore.client()
 
 journee = get_journee_actuelle()
 
-print(
-    f"Journée détectée : {journee}"
-)
-
 # ---------------------
 # MATCHS FIRESTORE
 # ---------------------
@@ -188,10 +184,6 @@ docs = (
 
 matchs = [doc.to_dict() for doc in docs]
 
-print(
-    f"{len(matchs)} matchs trouvés"
-)
-
 # ---------------------
 # UPDATE LIVE
 # ---------------------
@@ -210,12 +202,6 @@ for match in matchs:
     
     if not nom_dom or not nom_ext:
     
-        print(
-            f"Nom équipe inconnu : "
-            f"{match['domicile']} / "
-            f"{match['exterieur']}"
-        )
-    
         continue
     
     url_match = (
@@ -227,7 +213,6 @@ for match in matchs:
         f"{nom_dom}-"
         f"{nom_ext}"
     )
-    print(url_match)
 
     score_dom, score_ext, statut = (
         lire_score_match(
@@ -250,9 +235,3 @@ for match in matchs:
 
       })
 
-    print(
-        f"{id_lnr} -> "
-        f"{score_dom}-{score_ext}"
-    )
-
-print("Mise à jour terminée")
