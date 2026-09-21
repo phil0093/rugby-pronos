@@ -204,7 +204,7 @@ for match in matchs:
         f"{nom_dom}-"
         f"{nom_ext}"
     )
-  print(url_match)
+    print(url_match)
 
     score_dom, score_ext = (
         lire_score_match(
