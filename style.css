@@ -134,7 +134,8 @@ font-weight: bold;
     grid-template-columns:
         1fr
         60px
-        1fr;
+        1fr
+        220px;
 
     row-gap: 6px;
 
