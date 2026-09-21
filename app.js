@@ -541,6 +541,124 @@ async function enregistrerProno(matchId) {
 
 }
 
+function exporterCSV() {
+
+    const lignes = [];
+
+    lignes.push([
+        "joueur",
+        "idmatch",
+        "equipeDom",
+        "equipeExt",
+        "date",
+        "journee",
+        "saison",
+        "competition",
+        "scoreDom",
+        "scoreExt",
+        "pronoDom",
+        "pronoExt",
+        "bonVainqueur",
+        "scoreExact",
+        "bonusProximite",
+        "points"
+    ]);
+
+    (window.pronosTousLesJoueurs || [])
+        .forEach(prono => {
+
+            const match = Object
+                .values(
+                    window.matchesParCompetition
+                )
+                .flat()
+                .find(
+                    m => m.id === prono.matchId
+                );
+
+            if (!match) {
+                return;
+            }
+
+            if (
+                match.statut !== "termine"
+            ) {
+                return;
+            }
+
+            const resultat =
+                calculerPoints(
+                    match.scoreDom,
+                    match.scoreExt,
+                    prono.domicile,
+                    prono.exterieur
+                );
+
+            lignes.push([
+                prono.joueur,
+                match.id,
+                match.domicile,
+                match.exterieur,
+                match.date,
+                match.journee,
+                match.saison,
+                match.competition,
+                match.scoreDom,
+                match.scoreExt,
+                prono.domicile,
+                prono.exterieur,
+                resultat.bonVainqueur,
+                resultat.scoreExact,
+                resultat.bonusProximite,
+                resultat.points
+            ]);
+
+        });
+
+    const contenu =
+        lignes
+            .map(
+                ligne => ligne.join(";")
+            )
+            .join("\n");
+
+    const blob = new Blob(
+        [contenu],
+        {
+            type:
+                "text/csv;charset=utf-8;"
+        }
+    );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const lien =
+        document.createElement("a");
+
+    lien.href = url;
+
+    lien.download =
+        "pronostics_top14.csv";
+
+    document.body.appendChild(lien);
+
+    lien.click();
+
+    document.body.removeChild(lien);
+
+    URL.revokeObjectURL(url);
+}
+
+document
+    .getElementById(
+        "exportCsvBtn"
+    )
+    .addEventListener(
+        "click",
+        exporterCSV
+    );
+
 document
     .getElementById("loginBtn")
     .addEventListener(
