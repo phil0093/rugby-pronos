@@ -302,3 +302,21 @@ font-weight: bold;
     cursor: not-allowed;
 
 }
+.infosDroite {
+
+    text-align: left;
+
+    font-weight: bold;
+
+    font-size: 18px;
+
+}
+.etatPronoCentre {
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
