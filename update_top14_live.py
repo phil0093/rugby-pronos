@@ -100,11 +100,34 @@ def lire_score_match(url_match):
             texte_score.split(" - ")
         )
 
-        return (
-            int(score_dom),
-            int(score_ext)
+        statut_bloc = soup.select_one(
+            ".match-header__season-day"
         )
+        
+        if statut_bloc:
+        
+            texte_statut = statut_bloc.get_text(
+                strip=True
+            ).lower()
+        
+            if "terminé" in texte_statut:
+                statut = "termine"
+        
+            elif "en cours" in texte_statut:
+                statut = "encours"
+        
+            else:
+                statut = "avenir"
+        
+        else:
+        
+            statut = "avenir"
 
+        return (
+                int(score_dom),
+                int(score_ext),
+                statut
+            )
     except Exception as e:
 
         print(
@@ -206,7 +229,7 @@ for match in matchs:
     )
     print(url_match)
 
-    score_dom, score_ext = (
+    score_dom, score_ext, statut = (
         lire_score_match(
             url_match
         )
@@ -223,7 +246,7 @@ for match in matchs:
 
           "scoreExt": score_ext,
 
-          "statut": "encours"
+          "statut": statut
 
       })
 
