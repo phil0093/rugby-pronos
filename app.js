@@ -426,8 +426,12 @@ function afficherMatchs(competition, journee) {
                         ${matchCommence ? "disabled" : ""}>
                 </div>
             
-                <div class="separateur">
-                    -
+                <div class="etatPronoCentre">
+                    <span
+                        class="etatProno"
+                        id="etat-${match.id}">
+                        ${statutProno}
+                    </span>
                 </div>
             
                 <div class="prono">
@@ -440,16 +444,6 @@ function afficherMatchs(competition, journee) {
                         onchange="enregistrerProno('${match.id}')"
                         ${matchCommence ? "disabled" : ""}>
                 </div>
-            
-            </div>
-            
-            <div class="actionsMatch">
-
-                <span
-                    class="etatProno"
-                    id="etat-${match.id}">
-                    ${statutProno}
-                </span>
             
             </div>
                     
