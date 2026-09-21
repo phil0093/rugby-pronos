@@ -188,8 +188,8 @@ function afficherClassement() {
                 <tr>
                     <th>Joueur</th>
                     <th>Paris</th>
-                    <th>Scores exacts</th>
-                    <th>Scores justes</th>
+                    <th>Scores piles-poils</th>
+                    <th>Scores justes/exacts</th>
                     <th>% Victoire</th>
                     <th>Points</th>
                 </tr>
@@ -303,7 +303,7 @@ function afficherMatchs(competition, journee) {
         let scoreExtDore = "";
 
         if (
-            match.statut === "termine" &&
+            ["termine", "encours"].includes(match.statut) &&
             scoreDom !== "" &&
             scoreExt !== ""
         ) {
@@ -328,6 +328,7 @@ function afficherMatchs(competition, journee) {
             }
         
             if (
+                resultatCalcul.bonVainqueur &&
                 Number(scoreDom)
                 ===
                 match.scoreDom
@@ -336,6 +337,7 @@ function afficherMatchs(competition, journee) {
             }
         
             if (
+                resultatCalcul.bonVainqueur &&
                 Number(scoreExt)
                 ===
                 match.scoreExt
