@@ -320,3 +320,36 @@ font-weight: bold;
     align-items:center;
 
 }
+.btnExport{
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:20px 40px;
+
+    background:linear-gradient(
+        135deg,
+        #0066cc,
+        #0099ff
+    );
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+
+}
+
+.btnExport:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 8px 15px rgba(0,0,0,0.25);
+
+}
