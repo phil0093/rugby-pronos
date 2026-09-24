@@ -650,6 +650,72 @@ function exporterCSV() {
     URL.revokeObjectURL(url);
 }
 
+function preparerMailPronostics() {
+
+    const matchs =
+        (window.matchesParCompetition[
+            competitionCourante
+        ] || [])
+        .filter(
+            m => m.journee === journeeCourante
+        );
+
+    let corps = "";
+
+    corps +=
+        `${competitionCourante.toUpperCase()} - Journée ${journeeCourante}\n\n`;
+
+    matchs.forEach(match => {
+
+        corps +=
+            `${match.domicile} - ${match.exterieur}\n`;
+
+        const pronos =
+            (window.pronosTousLesJoueurs || [])
+            .filter(
+                p => p.matchId === match.id
+            );
+
+        if (pronos.length === 0) {
+
+            corps +=
+                "Aucun pronostic\n";
+
+        } else {
+
+            pronos.forEach(prono => {
+
+                corps +=
+                    `${prono.joueur} : `
+                    + `${prono.domicile}-${prono.exterieur}\n`;
+
+            });
+
+        }
+
+        corps += "\n";
+
+    });
+
+    const sujet =
+        encodeURIComponent(
+            `${competitionCourante.toUpperCase()} - Journée ${journeeCourante}`
+        );
+
+    const contenu =
+        encodeURIComponent(corps);
+
+    window.location.href =
+        `mailto:?subject=${sujet}&body=${contenu}`;
+}
+
+document
+    .getElementById("mailBtn")
+    .addEventListener(
+        "click",
+        preparerMailPronostics
+    );
+
 document
     .getElementById(
         "exportCsvBtn"
