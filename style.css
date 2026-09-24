@@ -353,3 +353,33 @@ font-weight: bold;
     box-shadow:0 8px 15px rgba(0,0,0,0.25);
 
 }
+
+.btnMail{
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:20px 40px;
+
+    background:#0a7a3c;
+
+    color:white;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:all 0.2s ease;
+
+}
+
+.btnMail:hover{
+
+    transform:translateY(-2px);
+
+    background:#086531;
+
+}
