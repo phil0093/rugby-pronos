@@ -74,29 +74,28 @@ def lire_score_match(url_match):
         )
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # --- Cas 1 : match en direct ---
+        # --- Détection match en direct ---
         live_bloc = soup.select_one(".match-header-broadcast__live-rec")
 
-        if live_bloc and "live" in live_bloc.get_text(strip=True).lower():
+        if live_bloc:
+            texte_live = live_bloc.get_text(strip=True).lower()
 
-            score_bloc = soup.select_one(".score")
+            if any(mot in texte_live for mot in ["live", "direct", "cours"]):
 
-            if not score_bloc:
-                return None, None, "avenir"
+                # Lecture du score live
+                score_bloc = soup.select_one(".score")
 
-            # ne garder que le texte direct du div, pas celui
-            # du <div class="score__halftime"> imbriqué
-            texte_score = "".join(
-                c for c in score_bloc.contents if isinstance(c, str)
-            ).strip()
+                if score_bloc:
+                    texte_score = score_bloc.get_text(strip=True)
 
-            if " - " not in texte_score:
-                return None, None, "avenir"
+                    if " - " in texte_score:
+                        score_dom, score_ext = texte_score.split(" - ")
+                        return int(score_dom), int(score_ext), "encours"
 
-            score_dom, score_ext = texte_score.split(" - ")
-            return int(score_dom), int(score_ext), "encours"
+                # Si pas de score mais live → match en cours
+                return None, None, "encours"
 
-        # --- Cas 2 : match terminé ---
+        # --- Détection match terminé ---
         statut_bloc = soup.select_one(".match-header__season-day")
 
         if statut_bloc and "terminé" in statut_bloc.get_text(strip=True).lower():
@@ -105,18 +104,15 @@ def lire_score_match(url_match):
                 ".title--large.title--textured.title--centered"
             )
 
-            if not score_bloc:
-                return None, None, "avenir"
+            if score_bloc:
+                texte_score = score_bloc.get_text(strip=True)
+                if " - " in texte_score:
+                    score_dom, score_ext = texte_score.split(" - ")
+                    return int(score_dom), int(score_ext), "termine"
 
-            texte_score = score_bloc.get_text(strip=True)
+            return None, None, "termine"
 
-            if " - " not in texte_score:
-                return None, None, "avenir"
-
-            score_dom, score_ext = texte_score.split(" - ")
-            return int(score_dom), int(score_ext), "termine"
-
-        # --- Cas 3 : ni live, ni terminé → à venir ---
+        # --- Sinon match à venir ---
         return None, None, "avenir"
 
     except Exception as e:
