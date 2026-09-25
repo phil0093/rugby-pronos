@@ -5,7 +5,7 @@ import json
 import os
 import requests
 from bs4 import BeautifulSoup
-
+from playwright.sync_api import sync_playwright
 
 BASE_URL = "https://prod2.lnr.fr/calendrier-et-resultats"
 SAISON = "2026-2027"
@@ -65,58 +65,34 @@ def get_journee_actuelle():
     return int(chiffres)
 
 
-def lire_score_match(url_match):
-    try:
-        response = requests.get(
-            url_match,
-            headers={"User-Agent": "Mozilla/5.0"},
-            timeout=10
-        )
-        soup = BeautifulSoup(response.text, "html.parser")
+def lire_score_match_playwright(url_match):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url_match, timeout=20000)
 
-        # --- Détection match en direct ---
-        live_bloc = soup.select_one(".match-header-broadcast__live-rec")
+        # statut live
+        live = page.locator(".match-header-broadcast__live-rec")
+        if live.count() > 0:
+            txt = live.inner_text().strip().lower()
+            if "live" in txt or "direct" in txt or "cours" in txt:
+                score = page.locator(".score").inner_text().strip()
+                if " - " in score:
+                    dom, ext = score.split(" - ")
+                    browser.close()
+                    return int(dom), int(ext), "encours"
 
-        if live_bloc:
-            texte_live = live_bloc.get_text(strip=True).lower()
+        # statut terminé
+        fini = page.locator(".match-header__season-day")
+        if fini.count() > 0:
+            if "terminé" in fini.inner_text().lower():
+                score = page.locator(".title--large.title--textured.title--centered").inner_text().strip()
+                if " - " in score:
+                    dom, ext = score.split(" - ")
+                    browser.close()
+                    return int(dom), int(ext), "termine"
 
-            if any(mot in texte_live for mot in ["live", "direct", "cours"]):
-
-                # Lecture du score live
-                score_bloc = soup.select_one(".score")
-
-                if score_bloc:
-                    texte_score = score_bloc.get_text(strip=True)
-
-                    if " - " in texte_score:
-                        score_dom, score_ext = texte_score.split(" - ")
-                        return int(score_dom), int(score_ext), "encours"
-
-                # Si pas de score mais live → match en cours
-                return None, None, "encours"
-
-        # --- Détection match terminé ---
-        statut_bloc = soup.select_one(".match-header__season-day")
-
-        if statut_bloc and "terminé" in statut_bloc.get_text(strip=True).lower():
-
-            score_bloc = soup.select_one(
-                ".title--large.title--textured.title--centered"
-            )
-
-            if score_bloc:
-                texte_score = score_bloc.get_text(strip=True)
-                if " - " in texte_score:
-                    score_dom, score_ext = texte_score.split(" - ")
-                    return int(score_dom), int(score_ext), "termine"
-
-            return None, None, "termine"
-
-        # --- Sinon match à venir ---
-        return None, None, "avenir"
-
-    except Exception as e:
-        print(f"Erreur {url_match} : {e}")
+        browser.close()
         return None, None, "avenir"
 
 # ---------------------
@@ -173,7 +149,7 @@ for ref, match in matchs:
         f"j{journee}/{match['id_lnr']}-{nom_dom}-{nom_ext}"
     )
 
-    score_dom, score_ext, statut = lire_score_match(url_match)
+    score_dom, score_ext, statut = lire_score_match_playwright(url_match)
 
     if score_dom is None:
         continue
