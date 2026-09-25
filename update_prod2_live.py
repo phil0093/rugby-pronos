@@ -72,15 +72,26 @@ def lire_score_match_playwright(url_match):
         page.goto(url_match, timeout=20000)
 
         # statut live
+        # statut live
         live = page.locator(".match-header-broadcast__live-rec")
         if live.count() > 0:
             txt = live.inner_text().strip().lower()
             if "live" in txt or "direct" in txt or "cours" in txt:
+        
                 score = page.locator(".score").inner_text().strip()
-                if " - " in score:
-                    dom, ext = score.split(" - ")
+        
+                # 🔍 DEBUG : afficher le score brut EXACT renvoyé par Playwright
+                print("DEBUG SCORE BRUT :", repr(score))
+        
+                import re
+                match = re.search(r"(\d+)\s*-\s*(\d+)", score)
+        
+                if match:
+                    dom = int(match.group(1))
+                    ext = int(match.group(2))
                     browser.close()
-                    return int(dom), int(ext), "encours"
+                    return dom, ext, "encours"
+
 
         # statut terminé
         fini = page.locator(".match-header__season-day")
