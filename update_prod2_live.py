@@ -76,7 +76,7 @@ def lire_score_match_playwright(url_match):
         # 1. MATCH EN COURS (LIVE)
         # -------------------------
         live = page.locator(".match-header-broadcast__live-rec")
-        print("DEBUG SCORE BRUT :", repr(score_raw), url_match), live
+        print("DEBUG :", url_match), live
         if live.count() > 0:
             txt = live.inner_text().strip().lower()
 
@@ -84,7 +84,7 @@ def lire_score_match_playwright(url_match):
             if "live" in txt:
                 # Score brut
                 score_raw = page.locator(".score").inner_text().strip()
-
+                print("DEBUG SCORE ENCOURS :", repr(score_raw), url_match), live
                 # On prend uniquement la première ligne avant le \n
                 first_line = score_raw.split("\n")[0].strip()
 
@@ -103,7 +103,8 @@ def lire_score_match_playwright(url_match):
         if fini.count() > 0:
             if "terminé" in fini.inner_text().lower():
                 score_raw = page.locator(".title--large.title--textured.title--centered").inner_text().strip()
-
+                print("DEBUG SCORE TERMINE :", repr(score_raw), url_match), live
+                
                 match = re.search(r"(\d+)\s*-\s*(\d+)", score_raw)
                 if match:
                     dom = int(match.group(1))
