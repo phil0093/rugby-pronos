@@ -81,7 +81,7 @@ def lire_score_match_playwright(url_match):
                 score = page.locator(".score").inner_text().strip()
         
                 # 🔍 DEBUG : afficher le score brut EXACT renvoyé par Playwright
-                print("DEBUG SCORE BRUT :", repr(score))
+                print("DEBUG SCORE BRUT :", repr(score), url_match)
         
                 import re
                 match = re.search(r"(\d+)\s*-\s*(\d+)", score)
