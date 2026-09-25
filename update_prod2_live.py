@@ -85,9 +85,6 @@ def lire_score_match_playwright(url_match):
                 # Score brut
                 score_raw = page.locator(".score").inner_text().strip()
 
-                # On affiche pour debug
-                print("DEBUG SCORE BRUT :", repr(score_raw), url_match)
-
                 # On prend uniquement la première ligne avant le \n
                 first_line = score_raw.split("\n")[0].strip()
 
