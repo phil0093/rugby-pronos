@@ -76,6 +76,7 @@ def lire_score_match_playwright(url_match):
         # 1. MATCH EN COURS (LIVE)
         # -------------------------
         live = page.locator(".match-header-broadcast__live-rec")
+        print("DEBUG SCORE BRUT :", repr(score_raw), url_match), live
         if live.count() > 0:
             txt = live.inner_text().strip().lower()
 
