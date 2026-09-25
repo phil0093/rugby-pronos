@@ -87,7 +87,7 @@ def lire_score_match(url_match):
         )
 
         if not score_bloc:
-            return None, None
+            return None, None, "avenir"
 
         texte_score = (
             score_bloc.get_text(
@@ -96,7 +96,7 @@ def lire_score_match(url_match):
         )
 
         if " - " not in texte_score:
-            return None, None
+            return None, None, "avenir"
 
         score_dom, score_ext = (
             texte_score.split(" - ")
@@ -136,7 +136,7 @@ def lire_score_match(url_match):
             f"Erreur {url_match} : {e}"
         )
 
-        return None, None
+        return None, None, "avenir"
 
 
 # ---------------------
