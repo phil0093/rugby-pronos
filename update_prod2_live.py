@@ -74,14 +74,36 @@ def lire_score_match_playwright(url_match):
         # statut live
         # statut live
         live = page.locator(".match-header-broadcast__live-rec")
+
+        print("DEBUG URL :", url_match)
+
+        # statut live (tous les blocs possibles)
+        print("DEBUG LIVE 1 :", page.locator(".match-header-broadcast__live-rec").inner_text() if page.locator(".match-header-broadcast__live-rec").count() else None)
+        print("DEBUG LIVE 2 :", page.locator(".match-header__live").inner_text() if page.locator(".match-header__live").count() else None)
+        print("DEBUG LIVE 3 :", page.locator(".match-header__status").inner_text() if page.locator(".match-header__status").count() else None)
+        
+        # score brut
+        score_raw = page.locator(".score").inner_text() if page.locator(".score").count() else None
+        print("DEBUG SCORE BRUT :", repr(score_raw))
+        
+        # minute du match
+        minute_raw = None
+        for cls in [
+            ".match-header-broadcast__live-time",
+            ".match-header__live-time",
+            ".match-header__minute"
+        ]:
+            if page.locator(cls).count():
+                minute_raw = page.locator(cls).inner_text()
+                break
+        
+        print("DEBUG MINUTE BRUT :", repr(minute_raw))
+
         if live.count() > 0:
             txt = live.inner_text().strip().lower()
             if "live" in txt or "direct" in txt or "cours" in txt:
         
                 score = page.locator(".score").inner_text().strip()
-        
-                # 🔍 DEBUG : afficher le score brut EXACT renvoyé par Playwright
-                print("DEBUG SCORE BRUT :", repr(score), url_match)
         
                 import re
                 match = re.search(r"(\d+)\s*-\s*(\d+)", score)
