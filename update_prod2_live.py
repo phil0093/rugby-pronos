@@ -72,45 +72,45 @@ def lire_score_match_playwright(url_match):
         page = browser.new_page()
         page.goto(url_match, timeout=20000)
 
-        # -------------------------
-        # 1. MATCH EN COURS (LIVE)
-        # -------------------------
-        live = page.locator(".match-header-broadcast__live-rec")
-        print("DEBUG :", url_match), live
-        if live.count() > 0:
-            txt = live.inner_text().strip().lower()
-
-            # Détection stricte du LIVE
-            if "live" in txt:
-                # Score brut
-                score_raw = page.locator(".score").inner_text().strip()
-                print("DEBUG SCORE ENCOURS :", repr(score_raw), url_match), live
-                # On prend uniquement la première ligne avant le \n
-                first_line = score_raw.split("\n")[0].strip()
-
-                # Extraction du score X - Y
-                match = re.search(r"(\d+)\s*-\s*(\d+)", first_line)
-                if match:
-                    dom = int(match.group(1))
-                    ext = int(match.group(2))
-                    browser.close()
-                    return dom, ext, "encours"
+        print("DEBUG :", url_match)
 
         # -------------------------
-        # 2. MATCH TERMINÉ (inchangé)
+        # 1. MATCH TERMINÉ (inchangé)
         # -------------------------
         fini = page.locator(".match-header__season-day")
         if fini.count() > 0:
             if "terminé" in fini.inner_text().lower():
                 score_raw = page.locator(".title--large.title--textured.title--centered").inner_text().strip()
-                print("DEBUG SCORE TERMINE :", repr(score_raw), url_match), live
-                
+                print("DEBUG SCORE TERMINE :", repr(score_raw), url_match)
+
                 match = re.search(r"(\d+)\s*-\s*(\d+)", score_raw)
                 if match:
                     dom = int(match.group(1))
                     ext = int(match.group(2))
                     browser.close()
                     return dom, ext, "termine"
+
+        # -------------------------
+        # 2. MATCH EN COURS (LIVE OU SCORE LIVE)
+        # -------------------------
+
+        # Détection LIVE classique
+        live = page.locator(".match-header-broadcast__live-rec")
+        live_txt = live.inner_text().strip().lower() if live.count() else ""
+
+        # Score brut
+        score_raw = page.locator(".score").inner_text().strip() if page.locator(".score").count() else ""
+        print("DEBUG SCORE ENCOURS :", repr(score_raw), url_match)
+
+        # Si LIVE détecté OU si score brut contient un score → match en cours
+        if "live" in live_txt or re.search(r"\d+\s*-\s*\d+", score_raw):
+            first_line = score_raw.split("\n")[0].strip()
+            match = re.search(r"(\d+)\s*-\s*(\d+)", first_line)
+            if match:
+                dom = int(match.group(1))
+                ext = int(match.group(2))
+                browser.close()
+                return dom, ext, "encours"
 
         # -------------------------
         # 3. SINON → À VENIR
