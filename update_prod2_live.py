@@ -66,78 +66,62 @@ def get_journee_actuelle():
 
 
 def lire_score_match(url_match):
-
     try:
-
         response = requests.get(
             url_match,
-            headers={
-                "User-Agent": "Mozilla/5.0"
-            },
+            headers={"User-Agent": "Mozilla/5.0"},
             timeout=10
         )
+        soup = BeautifulSoup(response.text, "html.parser")
 
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
-        )
+        # --- Cas 1 : match en direct ---
+        live_bloc = soup.select_one(".match-header-broadcast__live-rec")
 
-        score_bloc = soup.select_one(
-            ".title--large.title--textured.title--centered"
-        )
+        if live_bloc and "live" in live_bloc.get_text(strip=True).lower():
 
-        if not score_bloc:
-            return None, None, "avenir"
+            score_bloc = soup.select_one(".score")
 
-        texte_score = (
-            score_bloc.get_text(
-                strip=True
+            if not score_bloc:
+                return None, None, "avenir"
+
+            # ne garder que le texte direct du div, pas celui
+            # du <div class="score__halftime"> imbriqué
+            texte_score = "".join(
+                c for c in score_bloc.contents if isinstance(c, str)
+            ).strip()
+
+            if " - " not in texte_score:
+                return None, None, "avenir"
+
+            score_dom, score_ext = texte_score.split(" - ")
+            return int(score_dom), int(score_ext), "encours"
+
+        # --- Cas 2 : match terminé ---
+        statut_bloc = soup.select_one(".match-header__season-day")
+
+        if statut_bloc and "terminé" in statut_bloc.get_text(strip=True).lower():
+
+            score_bloc = soup.select_one(
+                ".title--large.title--textured.title--centered"
             )
-        )
 
-        if " - " not in texte_score:
-            return None, None, "avenir"
+            if not score_bloc:
+                return None, None, "avenir"
 
-        score_dom, score_ext = (
-            texte_score.split(" - ")
-        )
+            texte_score = score_bloc.get_text(strip=True)
 
-        statut_bloc = soup.select_one(
-            ".match-header__season-day"
-        )
-        
-        if statut_bloc:
-        
-            texte_statut = statut_bloc.get_text(
-                strip=True
-            ).lower()
-        
-            if "terminé" in texte_statut:
-                statut = "termine"
-        
-            elif "en cours" in texte_statut:
-                statut = "encours"
-        
-            else:
-                statut = "avenir"
-        
-        else:
-        
-            statut = "avenir"
+            if " - " not in texte_score:
+                return None, None, "avenir"
 
-        return (
-                int(score_dom),
-                int(score_ext),
-                statut
-            )
-    except Exception as e:
+            score_dom, score_ext = texte_score.split(" - ")
+            return int(score_dom), int(score_ext), "termine"
 
-        print(
-            f"Erreur {url_match} : {e}"
-        )
-
+        # --- Cas 3 : ni live, ni terminé → à venir ---
         return None, None, "avenir"
 
+    except Exception as e:
+        print(f"Erreur {url_match} : {e}")
+        return None, None, "avenir"
 
 # ---------------------
 # FIRESTORE
@@ -171,68 +155,35 @@ journee = get_journee_actuelle()
 
 docs = (
     db.collection("matchs")
-      .where(
-          "competition",
-          "==",
-          "prod2"
-      )
-      .where(
-          "journee",
-          "==",
-          journee
-      )
+      .where("competition", "==", "prod2")
+      .where("journee", "==", journee)
       .stream()
 )
 
-matchs = [doc.to_dict() for doc in docs]
+matchs = [(doc.reference, doc.to_dict()) for doc in docs]
 
 # ---------------------
 # UPDATE LIVE
 # ---------------------
 
-for match in matchs:
-
-    id_lnr = match["id_lnr"]
-
-    nom_dom = EQUIPES_URL.get(
-        match["domicile"]
-    )
-    
-    nom_ext = EQUIPES_URL.get(
-        match["exterieur"]
-    )
-    
+for ref, match in matchs:
+    nom_dom = EQUIPES_URL.get(match["domicile"])
+    nom_ext = EQUIPES_URL.get(match["exterieur"])
     if not nom_dom or not nom_ext:
-    
         continue
-    
+
     url_match = (
-        f"https://prod2.lnr.fr/"
-        f"feuille-de-match/"
-        f"{SAISON}/"
-        f"j{journee}/"
-        f"{match['id_lnr']}-"
-        f"{nom_dom}-"
-        f"{nom_ext}"
+        f"https://prod2.lnr.fr/feuille-de-match/{SAISON}/"
+        f"j{journee}/{match['id_lnr']}-{nom_dom}-{nom_ext}"
     )
 
-    score_dom, score_ext, statut = (
-        lire_score_match(
-            url_match
-        )
-    )
+    score_dom, score_ext, statut = lire_score_match(url_match)
 
     if score_dom is None:
         continue
 
-    db.collection("matchs") \
-      .document(id_lnr) \
-      .update({
-
-          "scoreDom": score_dom,
-
-          "scoreExt": score_ext,
-
-          "statut": statut
-
-      })
+    ref.update({
+        "scoreDom": score_dom,
+        "scoreExt": score_ext,
+        "statut": statut
+    })
