@@ -5,7 +5,8 @@ import json
 import os
 import requests
 from bs4 import BeautifulSoup
-
+from playwright.sync_api import sync_playwright
+import re
 
 BASE_URL = "https://top14.lnr.fr/calendrier-et-resultats"
 SAISON = "2026-2027"
@@ -63,79 +64,57 @@ def get_journee_actuelle():
     return int(chiffres)
 
 
-def lire_score_match(url_match):
+def lire_score_match_playwright(url_match):
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        page.goto(url_match, timeout=20000)
 
-    try:
+        print("DEBUG :", url_match)
 
-        response = requests.get(
-            url_match,
-            headers={
-                "User-Agent": "Mozilla/5.0"
-            },
-            timeout=10
-        )
+        # -------------------------
+        # 1. MATCH TERMINÉ (inchangé)
+        # -------------------------
+        fini = page.locator(".match-header__season-day")
+        if fini.count() > 0:
+            if "terminé" in fini.inner_text().lower():
+                score_raw = page.locator(".title--large.title--textured.title--centered").inner_text().strip()
+                print("DEBUG SCORE TERMINE :", repr(score_raw), url_match)
 
-        soup = BeautifulSoup(
-            response.text,
-            "html.parser"
-        )
+                match = re.search(r"(\d+)\s*-\s*(\d+)", score_raw)
+                if match:
+                    dom = int(match.group(1))
+                    ext = int(match.group(2))
+                    browser.close()
+                    return dom, ext, "termine"
 
-        score_bloc = soup.select_one(
-            ".title--large.title--textured.title--centered"
-        )
+        # -------------------------
+        # 2. MATCH EN COURS (LIVE OU SCORE LIVE)
+        # -------------------------
 
-        if not score_bloc:
-            return None, None
+        # Détection LIVE classique
+        live = page.locator(".match-header-broadcast__live-rec")
+        live_txt = live.inner_text().strip().lower() if live.count() else ""
 
-        texte_score = (
-            score_bloc.get_text(
-                strip=True
-            )
-        )
+        # Score brut
+        score_raw = page.locator(".score").inner_text().strip() if page.locator(".score").count() else ""
+        print("DEBUG SCORE ENCOURS :", repr(score_raw), url_match)
 
-        if " - " not in texte_score:
-            return None, None
+        # Si LIVE détecté OU si score brut contient un score → match en cours
+        if "live" in live_txt or re.search(r"\d+\s*-\s*\d+", score_raw):
+            first_line = score_raw.split("\n")[0].strip()
+            match = re.search(r"(\d+)\s*-\s*(\d+)", first_line)
+            if match:
+                dom = int(match.group(1))
+                ext = int(match.group(2))
+                browser.close()
+                return dom, ext, "encours"
 
-        score_dom, score_ext = (
-            texte_score.split(" - ")
-        )
-
-        statut_bloc = soup.select_one(
-            ".match-header__season-day"
-        )
-        
-        if statut_bloc:
-        
-            texte_statut = statut_bloc.get_text(
-                strip=True
-            ).lower()
-        
-            if "terminé" in texte_statut:
-                statut = "termine"
-        
-            elif "en cours" in texte_statut:
-                statut = "encours"
-        
-            else:
-                statut = "avenir"
-        
-        else:
-        
-            statut = "avenir"
-
-        return (
-                int(score_dom),
-                int(score_ext),
-                statut
-            )
-    except Exception as e:
-
-        print(
-            f"Erreur {url_match} : {e}"
-        )
-
-        return None, None
-
+        # -------------------------
+        # 3. SINON → À VENIR
+        # -------------------------
+        browser.close()
+        return None, None, "avenir"
 
 # ---------------------
 # FIRESTORE
@@ -169,69 +148,36 @@ journee = get_journee_actuelle()
 
 docs = (
     db.collection("matchs")
-      .where(
-          "competition",
-          "==",
-          "top14"
-      )
-      .where(
-          "journee",
-          "==",
-          journee
-      )
+      .where("competition", "==", "prod2")
+      .where("journee", "==", journee)
       .stream()
 )
 
-matchs = [doc.to_dict() for doc in docs]
+matchs = [(doc.reference, doc.to_dict()) for doc in docs]
 
 # ---------------------
 # UPDATE LIVE
 # ---------------------
 
-for match in matchs:
-
-    id_lnr = match["id_lnr"]
-
-    nom_dom = EQUIPES_URL.get(
-        match["domicile"]
-    )
-    
-    nom_ext = EQUIPES_URL.get(
-        match["exterieur"]
-    )
-    
+for ref, match in matchs:
+    nom_dom = EQUIPES_URL.get(match["domicile"])
+    nom_ext = EQUIPES_URL.get(match["exterieur"])
     if not nom_dom or not nom_ext:
-    
         continue
-    
+
     url_match = (
-        f"https://top14.lnr.fr/"
-        f"feuille-de-match/"
-        f"{SAISON}/"
-        f"j{journee}/"
-        f"{match['id_lnr']}-"
-        f"{nom_dom}-"
-        f"{nom_ext}"
+        f"https://top14.lnr.fr/feuille-de-match/{SAISON}/"
+        f"j{journee}/{match['id_lnr']}-{nom_dom}-{nom_ext}"
     )
 
-    score_dom, score_ext, statut = (
-        lire_score_match(
-            url_match
-        )
-    )
+    score_dom, score_ext, statut = lire_score_match_playwright(url_match)
 
     if score_dom is None:
         continue
 
-    db.collection("matchs") \
-      .document(id_lnr) \
-      .update({
-
-          "scoreDom": score_dom,
-
-          "scoreExt": score_ext,
-
-          "statut": statut
-
-      })
+    ref.update({
+        "scoreDom": score_dom,
+        "scoreExt": score_ext,
+        "statut": statut
+    })
 
