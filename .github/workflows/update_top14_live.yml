@@ -4,11 +4,8 @@ on:
   workflow_dispatch:
 
   schedule:
-    # Samedi toutes les 2 minutes de 15h00 à 22h58
-    - cron: '*/2 12-23 * * 6'
-
-    # Dimanche toutes les 2 minutes de 21h00 à 22h58
-    - cron: '*/2 19-22 * * 0'
+    - cron: '*/10 12-23 * * 6'
+    - cron: '*/10 19-22 * * 0'
 
 jobs:
 
@@ -25,6 +22,12 @@ jobs:
           python-version: "3.12"
 
       - run: pip install requests beautifulsoup4 firebase-admin
+
+      - name: Install Playwright
+        run: pip install playwright
+
+      - name: Install Playwright browsers
+        run: playwright install --with-deps
 
       - run: python update_top14_live.py
         env:
