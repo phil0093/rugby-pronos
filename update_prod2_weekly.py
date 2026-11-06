@@ -147,58 +147,51 @@ def scrape_journee(journee):
 
     return matchs_journee
 
+from playwright.sync_api import sync_playwright
+
 def recuperer_classement():
-
-    response = requests.get(
-        "https://prod2.lnr.fr/classement",
-        headers={
-            "User-Agent": "Mozilla/5.0"
-        }
-    )
-
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser"
-    )
 
     classement = {}
 
-    lignes = soup.select(".table-line")
+    with sync_playwright() as p:
 
-    rang = 1
-
-    for ligne in lignes:
-
-        texte = ligne.get_text(
-            "\n",
-            strip=True
+        browser = p.chromium.launch(
+            headless=True
         )
 
-        if not texte:
-            continue
+        page = browser.new_page()
 
-        premier_mot = texte.split("\n")[0].strip()
+        page.goto(
+            "https://prod2.lnr.fr/classement",
+            wait_until="networkidle"
+        )
 
-        if premier_mot in [
-            "Rang",
-            "Pts"
-        ]:
-            continue
+        page.wait_for_timeout(
+            5000
+        )
 
-        if len(premier_mot) < 4:
-            continue
+        equipes = page.locator(
+            ".table-line__cell-wrapper--club-name"
+        ).all_text_contents()
 
-        classement[premier_mot] = rang
+        browser.close()
 
-        rang += 1
+    equipes = [
+        e.strip()
+        for e in equipes
+        if e.strip()
+    ]
 
-        if rang > 16:
-            break
+    for rang, equipe in enumerate(
+        equipes,
+        start=1
+    ):
+
+        classement[equipe] = rang
 
     print(classement)
 
     return classement
-
     
 # --- Programme principal ---
 
