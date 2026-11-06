@@ -227,7 +227,7 @@ for match in all_matchs:
     db.collection("matchs").document(match["id_lnr"]).set(match)
 
 db.collection("classements") \
-  .document("prod2") \
+  .document("top14") \
   .set(classement_actuel)
 
 print(
