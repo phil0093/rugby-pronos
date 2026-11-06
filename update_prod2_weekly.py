@@ -156,47 +156,53 @@ def recuperer_classement():
         }
     )
 
-    soup = BeautifulSoup(
+    texte = BeautifulSoup(
         response.text,
         "html.parser"
+    ).get_text(
+        separator="\n"
     )
 
-    print(
-        "club-name =",
-        len(
-            soup.select(
-                ".table-line__cell-wrapper--club-name"
-            )
-        )
-    )
+    lignes = [
+        l.strip()
+        for l in texte.split("\n")
+        if l.strip()
+    ]
 
-    print(
-        "table-line =",
-        len(
-            soup.select(
-                ".table-line"
-            )
-        )
-    )
+    classement = {}
 
-    print(
-        "ranking =",
-        len(
-            soup.select(
-                ".ranking"
-            )
-        )
-    )
+    rang = 1
 
-    with open(
-        "classement_prod2.html",
-        "w",
-        encoding="utf-8"
-    ) as f:
+    for ligne in lignes:
 
-        f.write(response.text)
+        if (
+            len(ligne) > 3
+            and
+            not ligne.isdigit()
+            and
+            "Classement" not in ligne
+            and
+            "Rang" not in ligne
+            and
+            "Club" not in ligne
+            and
+            "Pts" not in ligne
+            and
+            "domicile" not in ligne.lower()
+            and
+            "extérieur" not in ligne.lower()
+        ):
 
-    return {}
+            if ligne not in classement:
+
+                classement[ligne] = rang
+
+                rang += 1
+
+                if rang > 16:
+                    break
+
+    return classement
 
     
 # --- Programme principal ---
@@ -207,6 +213,7 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 classement_actuel = recuperer_classement()
 print(classement_actuel)
+print(len(classement_actuel))
 
 print(
     f"{len(classement_actuel)} équipes classées"
