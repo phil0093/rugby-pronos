@@ -439,3 +439,52 @@ font-weight: bold;
     cursor: pointer;
 
 }
+
+.tableTendance {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+}
+
+.tableTendance th {
+
+    background: #00854a;
+
+    color: white;
+
+    padding: 8px;
+
+}
+
+.tableTendance td {
+
+    padding: 8px;
+
+    text-align: center;
+
+    border: 1px solid #ddd;
+
+}
+.resultatV {
+
+    color: #22a447;
+
+    font-weight: bold;
+
+}
+.resultatD {
+
+    color: red;
+
+    font-weight: bold;
+
+}
+.resultatN {
+
+    color: black;
+
+    font-weight: bold;
+
+}
