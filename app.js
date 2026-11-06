@@ -529,15 +529,106 @@ function ouvrirTendance(matchId) {
         )
         .slice(0, 5);
     
+    let html = `
+        <h3>
+            ${match.domicile}
+        </h3>
+    
+        <table class="tableTendance">
+    
+            <thead>
+    
+                <tr>
+    
+                    <th>Lieu</th>
+                    <th>Adversaire</th>
+                    <th>Score</th>
+                    <th>Résultat</th>
+    
+                </tr>
+    
+            </thead>
+    
+            <tbody>
+    `;
+
+    matchsEquipe.forEach(m => {
+
+        const domicile =
+            m.domicile === match.domicile;
+    
+        const lieu =
+            domicile ? "🏠" : "✈️";
+    
+        const adversaire =
+            domicile
+                ? m.exterieur
+                : m.domicile;
+    
+        const scoreEquipe =
+            domicile
+                ? m.scoreDom
+                : m.scoreExt;
+    
+        const scoreAdverse =
+            domicile
+                ? m.scoreExt
+                : m.scoreDom;
+    
+        let resultat = "";
+        let classe = "";
+    
+        if (scoreEquipe > scoreAdverse) {
+    
+            resultat = "V";
+            classe = "resultatV";
+    
+        } else if (
+            scoreEquipe < scoreAdverse
+        ) {
+    
+            resultat = "D";
+            classe = "resultatD";
+    
+        } else {
+    
+            resultat = "N";
+            classe = "resultatN";
+    
+        }
+    
+        html += `
+    
+            <tr>
+    
+                <td>${lieu}</td>
+    
+                <td>${adversaire}</td>
+    
+                <td>
+                    ${scoreEquipe}-${scoreAdverse}
+                </td>
+    
+                <td class="${classe}">
+                    ${resultat}
+                </td>
+    
+            </tr>
+    
+        `;
+    
+    });
+
+    html += `
+            </tbody>
+        </table>
+    `;
+    
     document.getElementById(
         "contenuPopupTendance"
     ).innerHTML =
-        JSON.stringify(
-            matchsEquipe,
-            null,
-            2
-        );
-
+        html;
+    
     document.getElementById(
         "popupTendance"
     ).style.display =
