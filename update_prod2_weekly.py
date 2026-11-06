@@ -156,51 +156,46 @@ def recuperer_classement():
         }
     )
 
-    texte = BeautifulSoup(
+    soup = BeautifulSoup(
         response.text,
         "html.parser"
-    ).get_text(
-        separator="\n"
     )
 
-    lignes = [
-        l.strip()
-        for l in texte.split("\n")
-        if l.strip()
-    ]
-
     classement = {}
+
+    lignes = soup.select(".table-line")
 
     rang = 1
 
     for ligne in lignes:
 
-        if (
-            len(ligne) > 3
-            and
-            not ligne.isdigit()
-            and
-            "Classement" not in ligne
-            and
-            "Rang" not in ligne
-            and
-            "Club" not in ligne
-            and
-            "Pts" not in ligne
-            and
-            "domicile" not in ligne.lower()
-            and
-            "extérieur" not in ligne.lower()
-        ):
+        texte = ligne.get_text(
+            "\n",
+            strip=True
+        )
 
-            if ligne not in classement:
+        if not texte:
+            continue
 
-                classement[ligne] = rang
+        premier_mot = texte.split("\n")[0].strip()
 
-                rang += 1
+        if premier_mot in [
+            "Rang",
+            "Pts"
+        ]:
+            continue
 
-                if rang > 16:
-                    break
+        if len(premier_mot) < 4:
+            continue
+
+        classement[premier_mot] = rang
+
+        rang += 1
+
+        if rang > 16:
+            break
+
+    print(classement)
 
     return classement
 
