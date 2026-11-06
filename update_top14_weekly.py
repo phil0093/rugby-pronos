@@ -147,13 +147,65 @@ def scrape_journee(journee):
 
     return matchs_journee
 
+from playwright.sync_api import sync_playwright
 
+def recuperer_classement():
+
+    classement = {}
+
+    with sync_playwright() as p:
+
+        browser = p.chromium.launch(
+            headless=True
+        )
+
+        page = browser.new_page()
+
+        page.goto(
+            "https://top14.lnr.fr/classement",
+            wait_until="domcontentloaded",
+            timeout=120000
+        )
+
+        page.wait_for_selector(
+            ".table-line__cell-wrapper--club-name",
+            timeout=30000
+        )
+
+        equipes = (
+            page.locator(
+                ".table-line__cell-wrapper--club-name"
+            )
+            .all_text_contents()
+        )
+
+        browser.close()
+
+    equipes = [
+        e.strip()
+        for e in equipes
+        if e.strip()
+    ]
+
+    for rang, equipe in enumerate(
+        equipes,
+        start=1
+    ):
+        classement[equipe] = rang
+
+    print(classement)
+
+    return classement
+    
 # --- Programme principal ---
 
 firebase_json = json.loads(os.environ["FIREBASE_CREDENTIALS"])
 cred = credentials.Certificate(firebase_json)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+classement_actuel = recuperer_classement()
+print(classement_actuel)
+print(len(classement_actuel))
 
 journee_actuelle = get_journee_actuelle()
 print(f"Journée actuelle détectée : {journee_actuelle}")
