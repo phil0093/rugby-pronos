@@ -163,27 +163,23 @@ def recuperer_classement():
 
     classement = {}
 
-    lignes = soup.select("tbody tr")
+    equipes = soup.select(
+        ".table-line__cell-wrapper--club-name"
+    )
 
-    rang = 1
+    for rang, equipe in enumerate(
+        equipes,
+        start=1
+    ):
 
-    for ligne in lignes:
-
-        equipe = ligne.select_one(
-            ".club-line__name"
+        nom = equipe.get_text(
+            strip=True
         )
 
-        if not equipe:
-            continue
-
-        classement[
-            equipe.get_text(strip=True)
-        ] = rang
-
-        rang += 1
+        classement[nom] = rang
 
     return classement
-
+    
 # --- Programme principal ---
 
 firebase_json = json.loads(os.environ["FIREBASE_CREDENTIALS"])
@@ -191,6 +187,7 @@ cred = credentials.Certificate(firebase_json)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 classement_actuel = recuperer_classement()
+print(classement_actuel)
 
 print(
     f"{len(classement_actuel)} équipes classées"
