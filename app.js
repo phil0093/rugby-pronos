@@ -468,6 +468,14 @@ function afficherMatchs(competition, journee) {
                             : "🟢 Terminé"
                     }
                 
+                    <button
+                        class="btnTendance"
+                        onclick="ouvrirTendance('${match.id}')">
+                
+                        📊
+                
+                    </button>
+                
                 </div>
             </div>
 
@@ -476,6 +484,52 @@ function afficherMatchs(competition, journee) {
         `;
     });
 }
+
+function ouvrirTendance(matchId) {
+
+    const match = Object
+        .values(window.matchesParCompetition)
+        .flat()
+        .find(m => m.id === matchId);
+
+    if (!match) {
+        return;
+    }
+
+    document.getElementById(
+        "titrePopupTendance"
+    ).textContent =
+        `${match.domicile} vs ${match.exterieur}`;
+
+    document.getElementById(
+        "contenuPopupTendance"
+    ).innerHTML =
+        "Chargement des statistiques...";
+
+    document.getElementById(
+        "popupTendance"
+    ).style.display =
+        "block";
+
+}
+
+document
+    .getElementById(
+        "fermerPopupTendance"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            document
+                .getElementById(
+                    "popupTendance"
+                )
+                .style.display =
+                "none";
+
+        }
+    );
 
 tabs.forEach(tab => {
 
