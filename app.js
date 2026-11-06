@@ -501,10 +501,42 @@ function ouvrirTendance(matchId) {
     ).textContent =
         `${match.domicile} vs ${match.exterieur}`;
 
+    const matchsEquipe = Object
+        .values(window.matchesParCompetition)
+        .flat()
+        .filter(m =>
+    
+            m.statut === "termine"
+    
+            &&
+    
+            (
+                m.domicile === match.domicile
+                ||
+                m.exterieur === match.domicile
+            )
+    
+            &&
+    
+            m.id !== match.id
+    
+        )
+        .sort(
+            (a, b) =>
+                new Date(construireDateISO(b))
+                -
+                new Date(construireDateISO(a))
+        )
+        .slice(0, 5);
+    
     document.getElementById(
         "contenuPopupTendance"
     ).innerHTML =
-        "Chargement des statistiques...";
+        JSON.stringify(
+            matchsEquipe,
+            null,
+            2
+        );
 
     document.getElementById(
         "popupTendance"
