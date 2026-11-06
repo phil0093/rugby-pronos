@@ -559,10 +559,22 @@ function ouvrirTendance(matchId) {
 
     function genererTableau(matchs, equipe) {
 
+        const rangEquipe =
+            window.classements?.[
+                competitionCourante
+            ]?.[
+                equipe
+            ];
+        
+        const titreEquipe =
+            rangEquipe
+                ? `${equipe} (#${rangEquipe})`
+                : equipe;
+        
         let html = `
-
-            <h3>${equipe}</h3>
-
+        
+            <h3>${titreEquipe}</h3>
+        
             <table class="tableTendance">
 
                 <thead>
