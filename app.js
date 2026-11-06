@@ -16,8 +16,8 @@ const tabs = document.querySelectorAll(".tab");
 const matchesDiv = document.getElementById("matches");
 
 let competitionCourante = "top14";
-
 let journeeCourante = 1;
+window.classements = {};
 
 function calculerPoints(
     reelDom,
