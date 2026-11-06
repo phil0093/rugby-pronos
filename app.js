@@ -636,14 +636,12 @@ function ouvrirTendance(matchId) {
 
                     <td>
 
-                        <strong>
-                            ${scoreEquipe}
-                        </strong>
-
-                        -
-
-                        ${scoreAdverse}
-
+                        ${
+                            domicile
+                                ? `<strong>${scoreEquipe}</strong> - ${scoreAdverse}`
+                                : `${scoreAdverse} - <strong>${scoreEquipe}</strong>`
+                        }
+                    
                     </td>
 
                     <td class="${classe}">
