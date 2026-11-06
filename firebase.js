@@ -43,6 +43,10 @@ window.matchesParCompetition = {
 };
 
 window.pronosTousLesJoueurs = [];
+window.classements = {
+    top14: {},
+    prod2: {}
+};
 
 function rafraichirAffichage() {
     if (typeof window.rafraichirAffichage === "function") {
@@ -110,6 +114,34 @@ onSnapshot(
     }
 );
 
+onSnapshot(
+    collection(db, "classements"),
+    (querySnapshot) => {
+
+        querySnapshot.forEach(doc => {
+
+            window.classements[
+                doc.id
+            ] = doc.data();
+
+        });
+
+        console.log(
+            "Classements mis à jour"
+        );
+
+        rafraichirAffichage();
+
+    },
+    (erreur) => {
+
+        console.error(
+            "Erreur de lecture Firestore (classements) :",
+            erreur
+        );
+
+    }
+);
 // Enregistre (ou remplace) le pronostic de l'utilisateur connecté
 // pour un match donné.
 window.enregistrerPronoFirestore = async function (matchId, domicile, exterieur) {
