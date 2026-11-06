@@ -147,6 +147,42 @@ def scrape_journee(journee):
 
     return matchs_journee
 
+def recuperer_classement():
+
+    response = requests.get(
+        "https://prod2.lnr.fr/classement",
+        headers={
+            "User-Agent": "Mozilla/5.0"
+        }
+    )
+
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )
+
+    classement = {}
+
+    lignes = soup.select("tbody tr")
+
+    rang = 1
+
+    for ligne in lignes:
+
+        equipe = ligne.select_one(
+            ".club-line__name"
+        )
+
+        if not equipe:
+            continue
+
+        classement[
+            equipe.get_text(strip=True)
+        ] = rang
+
+        rang += 1
+
+    return classement
 
 # --- Programme principal ---
 
@@ -154,6 +190,11 @@ firebase_json = json.loads(os.environ["FIREBASE_CREDENTIALS"])
 cred = credentials.Certificate(firebase_json)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+classement_actuel = recuperer_classement()
+
+print(
+    f"{len(classement_actuel)} équipes classées"
+)
 
 journee_actuelle = get_journee_actuelle()
 print(f"Journée actuelle détectée : {journee_actuelle}")
@@ -173,5 +214,13 @@ print(f"{len(all_matchs)} matchs au total")
 
 for match in all_matchs:
     db.collection("matchs").document(match["id_lnr"]).set(match)
+    
+db.collection("classements") \
+  .document("prod2") \
+  .set(classement_actuel)
+
+print(
+    "Classement PROD2 mis à jour"
+)
 
 print(f"{len(all_matchs)} matchs écrits dans Firestore")
