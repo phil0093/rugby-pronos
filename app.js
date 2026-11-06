@@ -832,6 +832,7 @@ afficherMatchs(
 afficherClassement();
 
 window.enregistrerProno = enregistrerProno;
+window.ouvrirTendance = ouvrirTendance;
 window.rafraichirAffichage = function () {
     journeeCourante =
         trouverJourneeCourante(
