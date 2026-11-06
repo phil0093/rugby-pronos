@@ -24,6 +24,11 @@ jobs:
 
       - run: pip install requests beautifulsoup4 firebase-admin
 
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium
+          
       - run: python update_prod2_weekly.py
         env:
           FIREBASE_CREDENTIALS: ${{ secrets.FIREBASE_CREDENTIALS }}
