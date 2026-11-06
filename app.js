@@ -501,25 +501,25 @@ function ouvrirTendance(matchId) {
     ).textContent =
         `${match.domicile} vs ${match.exterieur}`;
 
-    const matchsEquipe = Object
+    const matchsDomicile = Object
         .values(window.matchesParCompetition)
         .flat()
         .filter(m =>
-    
+
             m.statut === "termine"
-    
+
             &&
-    
+
             (
                 m.domicile === match.domicile
                 ||
                 m.exterieur === match.domicile
             )
-    
+
             &&
-    
+
             m.id !== match.id
-    
+
         )
         .sort(
             (a, b) =>
@@ -528,112 +528,167 @@ function ouvrirTendance(matchId) {
                 new Date(construireDateISO(a))
         )
         .slice(0, 5);
-    
-    let html = `
-        <h3>
-            ${match.domicile}
-        </h3>
-    
-        <table class="tableTendance">
-    
-            <thead>
-    
-                <tr>
-    
-                    <th>Lieu</th>
-                    <th>Adversaire</th>
-                    <th>Score</th>
-                    <th>Résultat</th>
-    
-                </tr>
-    
-            </thead>
-    
-            <tbody>
-    `;
 
-    matchsEquipe.forEach(m => {
+    const matchsExterieur = Object
+        .values(window.matchesParCompetition)
+        .flat()
+        .filter(m =>
 
-        const domicile =
-            m.domicile === match.domicile;
-    
-        const lieu =
-            domicile ? "🏠" : "✈️";
-    
-        const adversaire =
-            domicile
-                ? m.exterieur
-                : m.domicile;
-    
-        const scoreEquipe =
-            domicile
-                ? m.scoreDom
-                : m.scoreExt;
-    
-        const scoreAdverse =
-            domicile
-                ? m.scoreExt
-                : m.scoreDom;
-    
-        let resultat = "";
-        let classe = "";
-    
-        if (scoreEquipe > scoreAdverse) {
-    
-            resultat = "V";
-            classe = "resultatV";
-    
-        } else if (
-            scoreEquipe < scoreAdverse
-        ) {
-    
-            resultat = "D";
-            classe = "resultatD";
-    
-        } else {
-    
-            resultat = "N";
-            classe = "resultatN";
-    
-        }
-    
-        html += `
-    
-            <tr>
-    
-                <td>${lieu}</td>
-    
-                <td>${adversaire}</td>
-    
-                <td>
-                    ${scoreEquipe}-${scoreAdverse}
-                </td>
-    
-                <td class="${classe}">
-                    ${resultat}
-                </td>
-    
-            </tr>
-    
+            m.statut === "termine"
+
+            &&
+
+            (
+                m.domicile === match.exterieur
+                ||
+                m.exterieur === match.exterieur
+            )
+
+            &&
+
+            m.id !== match.id
+
+        )
+        .sort(
+            (a, b) =>
+                new Date(construireDateISO(b))
+                -
+                new Date(construireDateISO(a))
+        )
+        .slice(0, 5);
+
+    function genererTableau(matchs, equipe) {
+
+        let html = `
+
+            <h3>${equipe}</h3>
+
+            <table class="tableTendance">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Lieu</th>
+                        <th>Adversaire</th>
+                        <th>Score</th>
+                        <th>Résultat</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
         `;
-    
-    });
 
-    html += `
-            </tbody>
-        </table>
-    `;
-    
+        matchs.forEach(m => {
+
+            const domicile =
+                m.domicile === equipe;
+
+            const lieu =
+                domicile ? "🏠" : "✈️";
+
+            const adversaire =
+                domicile
+                    ? m.exterieur
+                    : m.domicile;
+
+            const scoreEquipe =
+                domicile
+                    ? m.scoreDom
+                    : m.scoreExt;
+
+            const scoreAdverse =
+                domicile
+                    ? m.scoreExt
+                    : m.scoreDom;
+
+            let resultat = "";
+            let classe = "";
+
+            if (scoreEquipe > scoreAdverse) {
+
+                resultat = "V";
+                classe = "resultatV";
+
+            } else if (
+                scoreEquipe < scoreAdverse
+            ) {
+
+                resultat = "D";
+                classe = "resultatD";
+
+            } else {
+
+                resultat = "N";
+                classe = "resultatN";
+
+            }
+
+            html += `
+
+                <tr>
+
+                    <td>${lieu}</td>
+
+                    <td>${adversaire}</td>
+
+                    <td>
+
+                        <strong>
+                            ${scoreEquipe}
+                        </strong>
+
+                        -
+
+                        ${scoreAdverse}
+
+                    </td>
+
+                    <td class="${classe}">
+                        ${resultat}
+                    </td>
+
+                </tr>
+
+            `;
+        });
+
+        html += `
+
+                </tbody>
+
+            </table>
+
+        `;
+
+        return html;
+    }
+
+    let html = "";
+
+    html += genererTableau(
+        matchsDomicile,
+        match.domicile
+    );
+
+    html += "<br>";
+
+    html += genererTableau(
+        matchsExterieur,
+        match.exterieur
+    );
+
     document.getElementById(
         "contenuPopupTendance"
     ).innerHTML =
         html;
-    
+
     document.getElementById(
         "popupTendance"
     ).style.display =
         "block";
-
 }
 
 document
