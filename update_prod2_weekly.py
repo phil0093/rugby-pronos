@@ -161,24 +161,43 @@ def recuperer_classement():
         "html.parser"
     )
 
-    classement = {}
-
-    equipes = soup.select(
-        ".table-line__cell-wrapper--club-name"
+    print(
+        "club-name =",
+        len(
+            soup.select(
+                ".table-line__cell-wrapper--club-name"
+            )
+        )
     )
 
-    for rang, equipe in enumerate(
-        equipes,
-        start=1
-    ):
-
-        nom = equipe.get_text(
-            strip=True
+    print(
+        "table-line =",
+        len(
+            soup.select(
+                ".table-line"
+            )
         )
+    )
 
-        classement[nom] = rang
+    print(
+        "ranking =",
+        len(
+            soup.select(
+                ".ranking"
+            )
+        )
+    )
 
-    return classement
+    with open(
+        "classement_prod2.html",
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        f.write(response.text)
+
+    return {}
+
     
 # --- Programme principal ---
 
