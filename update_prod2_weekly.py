@@ -163,11 +163,13 @@ def recuperer_classement():
 
         page.goto(
             "https://prod2.lnr.fr/classement",
-            wait_until="networkidle"
+            wait_until="domcontentloaded",
+            timeout=120000
         )
 
-        page.wait_for_timeout(
-            5000
+        page.wait_for_selector(
+            ".table-line__cell-wrapper--club-name",
+            timeout=30000
         )
 
         equipes = page.locator(
