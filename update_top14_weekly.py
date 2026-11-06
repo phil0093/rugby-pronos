@@ -226,4 +226,12 @@ print(f"{len(all_matchs)} matchs au total")
 for match in all_matchs:
     db.collection("matchs").document(match["id_lnr"]).set(match)
 
+db.collection("classements") \
+  .document("prod2") \
+  .set(classement_actuel)
+
+print(
+    "Classement TOP14 mis à jour"
+)
+
 print(f"{len(all_matchs)} matchs écrits dans Firestore")
