@@ -416,6 +416,7 @@ font-weight: bold;
 
     border-radius: 12px;
 
+    font-size: 18px;
 }
 
 .popupHeader {
@@ -446,6 +447,7 @@ font-weight: bold;
 
     border-collapse: collapse;
 
+    font-size: 17px;
 }
 
 .tableTendance th {
@@ -493,7 +495,8 @@ font-weight: bold;
     display: flex;
     align-items: center;
     gap: 10px;
-
+    font-size: 22px;
+    font-weight: bold;
 }
 .logoTendance {
 
@@ -531,6 +534,37 @@ font-weight: bold;
     margin-right: 6px;
 
     vertical-align: middle;
+
+}
+@media (max-width: 768px) {
+
+    .popupTendanceContenu {
+
+        font-size: 20px;
+
+        width: 98%;
+
+        padding: 15px;
+
+    }
+
+    .tableTendance {
+
+        font-size: 18px;
+
+    }
+
+    .titreEquipeTendance {
+
+        font-size: 24px;
+
+    }
+
+    .prochainsMatchs {
+
+        font-size: 18px;
+
+    }
 
 }
 
