@@ -641,34 +641,55 @@ function ouvrirTendance(matchId) {
 
                     const domicile =
                         p.domicile === equipe;
+                
+                    const adversaire =
+                        domicile
+                            ? p.exterieur
+                            : p.domicile;
+                
+                    const rangAdversaire =
+                        window.classements?.[
+                            competitionCourante
+                        ]?.[
+                            adversaire
+                        ];
 
+                    const logoAdversaire =
+                        domicile
+                            ? p.logoExt
+                            : p.logoDom;
+                    
                     return `
-
-                        <div>
-
+                
+                        <div class="ligneProchainMatch">
+                        
                             📅
                             ${formaterDate(
                                 construireDateISO(p)
                             )}
-
-                            &nbsp;
-
+                        
                             ${
                                 domicile
                                     ? "🏠"
                                     : "✈️"
                             }
-
+                        
+                            <img
+                                src="${logoAdversaire}"
+                                class="logoPetit">
+                        
+                            ${adversaire}
+                        
                             ${
-                                domicile
-                                    ? p.exterieur
-                                    : p.domicile
+                                rangAdversaire
+                                    ? `(#${rangAdversaire})`
+                                    : ""
                             }
-
+                        
                         </div>
-
+                
                     `;
-
+                
                 }).join("")}
 
             </div>
@@ -704,7 +725,11 @@ function ouvrirTendance(matchId) {
                 domicile
                     ? m.exterieur
                     : m.domicile;
-
+            const logoAdversaire =
+                domicile
+                    ? m.logoExt
+                    : m.logoDom;
+            
             const scoreEquipe =
                 domicile
                     ? m.scoreDom
@@ -749,7 +774,15 @@ function ouvrirTendance(matchId) {
 
                     <td>${lieu}</td>
 
-                    <td>${adversaire}</td>
+                    <td>
+
+                        <img
+                            src="${logoAdversaire}"
+                            class="logoPetit">
+                    
+                        ${adversaire}
+                    
+                    </td>
 
                     <td>
 
