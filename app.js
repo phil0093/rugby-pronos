@@ -565,22 +565,121 @@ function ouvrirTendance(matchId) {
             ]?.[
                 equipe
             ];
-        
+
         const titreEquipe =
             rangEquipe
                 ? `${equipe} (#${rangEquipe})`
                 : equipe;
-        
+
+        const matchEquipe =
+            Object
+                .values(window.matchesParCompetition)
+                .flat()
+                .find(m =>
+
+                    m.domicile === equipe
+                    ||
+                    m.exterieur === equipe
+
+                );
+
+        const logoEquipe =
+            matchEquipe
+                ? (
+                    matchEquipe.domicile === equipe
+                        ? matchEquipe.logoDom
+                        : matchEquipe.logoExt
+                )
+                : "";
+
+        const prochains = Object
+            .values(window.matchesParCompetition)
+            .flat()
+            .filter(m =>
+
+                m.statut === "avenir"
+
+                &&
+
+                (
+                    m.domicile === equipe
+                    ||
+                    m.exterieur === equipe
+                )
+
+            )
+            .sort(
+                (a, b) =>
+                    new Date(construireDateISO(a))
+                    -
+                    new Date(construireDateISO(b))
+            )
+            .slice(0, 2);
+
         let html = `
-        
-            <h3>${titreEquipe}</h3>
-        
+
+            <h3 class="titreEquipeTendance">
+
+                <img
+                    src="${logoEquipe}"
+                    class="logoTendance"
+                    alt="${equipe}">
+
+                <span>
+                    ${titreEquipe}
+                </span>
+
+            </h3>
+
+            <div class="prochainsMatchs">
+
+                <strong>
+                    Prochains matchs
+                </strong>
+
+                ${prochains.map(p => {
+
+                    const domicile =
+                        p.domicile === equipe;
+
+                    return `
+
+                        <div>
+
+                            📅
+                            ${formaterDate(
+                                construireDateISO(p)
+                            )}
+
+                            &nbsp;
+
+                            ${
+                                domicile
+                                    ? "🏠"
+                                    : "✈️"
+                            }
+
+                            ${
+                                domicile
+                                    ? p.exterieur
+                                    : p.domicile
+                            }
+
+                        </div>
+
+                    `;
+
+                }).join("")}
+
+            </div>
+
             <table class="tableTendance">
 
                 <thead>
 
                     <tr>
 
+                        <th>Date</th>
                         <th>Lieu</th>
                         <th>Adversaire</th>
                         <th>Score</th>
@@ -642,6 +741,12 @@ function ouvrirTendance(matchId) {
 
                 <tr>
 
+                    <td>
+                        ${formaterDate(
+                            construireDateISO(m)
+                        )}
+                    </td>
+
                     <td>${lieu}</td>
 
                     <td>${adversaire}</td>
@@ -653,7 +758,7 @@ function ouvrirTendance(matchId) {
                                 ? `<strong>${scoreEquipe}</strong> - ${scoreAdverse}`
                                 : `${scoreAdverse} - <strong>${scoreEquipe}</strong>`
                         }
-                    
+
                     </td>
 
                     <td class="${classe}">
