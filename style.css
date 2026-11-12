@@ -400,6 +400,8 @@ font-weight: bold;
 
     z-index: 1000;
 
+    overflow-y: auto;
+
 }
 
 .popupTendanceContenu {
@@ -410,14 +412,16 @@ font-weight: bold;
 
     max-width: 900px;
 
-    margin: 50px auto;
+    margin: 20px auto;
 
     padding: 20px;
 
     border-radius: 12px;
 
-    font-size: 18px;
+    max-height: 90vh;
+
 }
+
 
 .popupHeader {
 
