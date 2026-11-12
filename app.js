@@ -595,26 +595,31 @@ function ouvrirTendance(matchId) {
         const prochains = Object
             .values(window.matchesParCompetition)
             .flat()
-            .filter(m =>
-
-                m.statut === "avenir"
-
-                &&
-
-                (
+            .filter(m => {
+        
+                const memeEquipe =
                     m.domicile === equipe
                     ||
-                    m.exterieur === equipe
-                )
-
-            )
+                    m.exterieur === equipe;
+        
+                return (
+                    memeEquipe
+                    &&
+                    m.id !== match.id
+                    &&
+                    new Date(construireDateISO(m))
+                        >
+                    new Date(construireDateISO(match))
+                );
+        
+            })
             .sort(
-                (a, b) =>
+                (a,b) =>
                     new Date(construireDateISO(a))
                     -
                     new Date(construireDateISO(b))
             )
-            .slice(0, 2);
+            .slice(0,2);
 
         let html = `
 
