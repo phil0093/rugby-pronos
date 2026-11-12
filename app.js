@@ -606,10 +606,6 @@ function ouvrirTendance(matchId) {
                     memeEquipe
                     &&
                     m.id !== match.id
-                    &&
-                    new Date(construireDateISO(m))
-                        >
-                    new Date(construireDateISO(match))
                 );
         
             })
@@ -618,8 +614,21 @@ function ouvrirTendance(matchId) {
                     new Date(construireDateISO(a))
                     -
                     new Date(construireDateISO(b))
-            )
-            .slice(0,2);
+            );
+        
+        const indexMatchActuel =
+            prochains.findIndex(
+                m =>
+                    new Date(construireDateISO(m))
+                    >
+                    new Date(construireDateISO(match))
+            );        
+
+const prochainsAffiches =
+    indexMatchActuel >= 0
+        ? prochains.slice(indexMatchActuel, indexMatchActuel + 2)
+        : [];
+
 
         let html = `
 
@@ -642,7 +651,7 @@ function ouvrirTendance(matchId) {
                     Prochains matchs
                 </strong>
 
-                ${prochains.map(p => {
+                ${prochainsAffiches.map(p => {
 
                     const domicile =
                         p.domicile === equipe;
