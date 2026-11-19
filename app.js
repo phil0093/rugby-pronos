@@ -496,11 +496,7 @@ function ouvrirTendance(matchId) {
         return;
     }
 
-    document.getElementById(
-        "titrePopupTendance"
-    ).textContent =
-        `${match.domicile} vs ${match.exterieur}`;
-
+    
     const matchsDomicile = Object
         .values(window.matchesParCompetition)
         .flat()
@@ -624,10 +620,10 @@ function ouvrirTendance(matchId) {
                     new Date(construireDateISO(match))
             );        
 
-const prochainsAffiches =
-    indexMatchActuel >= 0
-        ? prochains.slice(indexMatchActuel, indexMatchActuel + 2)
-        : [];
+        const prochainsAffiches =
+            indexMatchActuel >= 0
+                ? prochains.slice(indexMatchActuel, indexMatchActuel + 2)
+                : [];
 
 
         let html = `
